@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#6A1B1A">
+  <meta name="description" content="Company House, a gamified classroom experience for Corporate Law and Administration.">
+  <title>Company House | Corporate Law and Administration</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --mustard: #E8B53D;
+      --maroon: #6A1B1A;
+      --cream: #FFFBF0;
+      --paper: #FFFDF7;
+      --ink: #24211E;
+      --muted: #716A60;
+      --line: #E7DDC9;
+      --mustard-soft: #F7E9BC;
+      --maroon-soft: #F2E4E1;
+      --green: #276749;
+      --green-soft: #E4F1E6;
+      --shadow: 0 12px 32px rgba(55, 38, 18, .08);
+      --radius: 18px;
+      --serif: Georgia, "Times New Roman", serif;
+      --sans: Inter, Arial, sans-serif;
+      --mono: "Space Mono", monospace;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; width: 100%; overflow-x: hidden; overflow-wrap: break-word; background: var(--cream); color: var(--ink); font-family: var(--sans); scroll-behavior: smooth; }
+    body { line-height: 1.5; }
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+    button:focus-visible, input:focus-visible, select:focus-visible, [tabindex]:focus-visible { outline: 3px solid var(--mustard); outline-offset: 3px; }
+    svg, iframe, video, img { max-width: 100%; }
+    a { color: inherit; }
+    .shell { width: min(1200px, calc(100% - 32px)); margin-inline: auto; }
+    .eyebrow { display: inline-flex; gap: 8px; align-items: center; color: var(--maroon); font-family: var(--mono); font-size: .69rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; }
+    .eyebrow::before { content: ""; display: inline-block; width: 22px; height: 2px; background: var(--mustard); }
+    h1, h2, h3, h4 { font-family: var(--serif); line-height: 1.12; font-weight: 700; margin: 0; }
+    h2 { font-size: clamp(1.7rem, 3vw, 2.45rem); letter-spacing: -.025em; }
+    p { margin: 0; }
+    .section { padding: 62px 0; border-bottom: 1px solid var(--line); }
+    .section-head { display: flex; justify-content: space-between; align-items: end; gap: 22px; margin-bottom: 28px; }
+    .section-head .intro { max-width: 670px; }
+    .section-head .eyebrow { margin-bottom: 10px; }
+    .section-note { max-width: 340px; color: var(--muted); font-size: .9rem; }
+    .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 9px; border: 1px solid transparent; border-radius: 999px; padding: 11px 17px; background: var(--maroon); color: white; font-weight: 700; font-size: .85rem; transition: transform .18s ease, background .18s ease, box-shadow .18s ease; text-decoration: none; }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 7px 18px rgba(106, 27, 26, .15); background: #4E1111; }
+    .btn.secondary { color: var(--maroon); background: transparent; border-color: #CDB9A2; }
+    .btn.secondary:hover { background: var(--maroon-soft); box-shadow: none; }
+    .btn.mustard { color: var(--ink); background: var(--mustard); }
+    .btn.mustard:hover { background: #F0C85C; }
+    .btn.small { padding: 8px 12px; font-size: .76rem; }
+    .btn:disabled { opacity: .45; cursor: not-allowed; transform: none; box-shadow: none; }
+    .pill { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 999px; background: var(--mustard-soft); color: #654900; font-size: .73rem; font-weight: 800; white-space: nowrap; }
+    .pill.maroon { background: var(--maroon-soft); color: var(--maroon); }
+    .pill.green { background: var(--green-soft); color: var(--green); }
+    .pill.demo { border: 1px solid #DCC58A; background: #FFF3CF; color: #654900; }
+    .tiny-label { color: var(--muted); font-size: .72rem; text-transform: uppercase; font-weight: 800; letter-spacing: .07em; }
+    .card { border: 1px solid var(--line); border-radius: var(--radius); background: var(--paper); box-shadow: var(--shadow); }
+    .hero { position: relative; overflow: hidden; background: var(--maroon); color: var(--cream); padding: clamp(28px, 6vw, 76px) 0 clamp(34px, 5vw, 62px); }
+    .hero::before { content: ""; position: absolute; width: 430px; height: 430px; right: -170px; top: -220px; border: 1px solid rgba(232,181,61,.3); border-radius: 50%; box-shadow: 0 0 0 34px rgba(232,181,61,.04), 0 0 0 74px rgba(232,181,61,.035); pointer-events: none; }
+    .hero::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 6px; background: repeating-linear-gradient(90deg, var(--mustard) 0 38px, transparent 38px 52px); }
+    .topbar { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: clamp(28px, 5vw, 64px); position: relative; z-index: 1; }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 800; letter-spacing: .02em; }
+    .brand-mark { width: 44px; height: 44px; display: grid; place-items: center; flex: 0 0 auto; background: var(--mustard); color: var(--maroon); border-radius: 50%; font-family: var(--serif); font-size: 1.8rem; font-weight: 700; box-shadow: 0 0 0 4px rgba(232,181,61,.14); }
+    .brand-sub { color: #E5D2B0; font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; }
+    .top-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .top-actions .btn { border-color: rgba(255,251,240,.32); background: rgba(255,251,240,.07); }
+    .top-actions .btn:hover { background: rgba(255,251,240,.15); }
+    .hero-grid { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(230px, .8fr); align-items: end; gap: 44px; }
+    .hero .eyebrow { color: var(--mustard); margin-bottom: 16px; }
+    .hero h1 { font-size: clamp(3rem, 8vw, 6.6rem); letter-spacing: -.055em; max-width: 730px; }
+    .hero h1 span { color: var(--mustard); }
+    .hero-sub { font-size: clamp(1.05rem, 2vw, 1.4rem); margin-top: 18px; color: #F0E6D4; max-width: 630px; }
+    .course-line { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 25px; color: #E8D5B7; font-size: .86rem; }
+    .course-line strong { color: white; }
+    .course-line .dot { color: var(--mustard); }
+    .hero-stat-panel { border: 1px solid rgba(255,251,240,.2); background: rgba(255,251,240,.06); border-radius: 22px; padding: 22px; }
+    .hero-stat-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-bottom: 17px; border-bottom: 1px solid rgba(255,251,240,.17); }
+    .hero-stat-head span:first-child { color: #E5D2B0; font-size: .78rem; }
+    .season-number { font-family: var(--mono); font-size: 1.1rem; color: var(--mustard); font-weight: 700; }
+    .hero-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; padding-top: 20px; }
+    .hero-stat strong { display: block; font-family: var(--serif); font-size: 2rem; line-height: 1; margin-bottom: 7px; }
+    .hero-stat span { display: block; color: #D8C6A9; font-size: .76rem; }
+    .hero-footnote { color: #D8C6A9; font-size: .75rem; margin-top: 20px; }
+    .ticker-shell { background: #251A18; color: var(--cream); border-bottom: 3px solid var(--mustard); overflow: hidden; }
+    .ticker-row { display: flex; align-items: stretch; min-height: 47px; }
+    .ticker-tag { flex: 0 0 auto; display: grid; place-items: center; background: var(--mustard); color: var(--maroon); padding: 0 16px; font-family: var(--mono); font-size: .68rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+    .ticker-window { min-width: 0; overflow: hidden; display: flex; align-items: center; }
+    .ticker-track { display: flex; align-items: center; gap: 42px; white-space: nowrap; padding-left: 26px; width: max-content; animation: tickerMove 36s linear infinite; }
+    .ticker-track:hover { animation-play-state: paused; }
+    .ticker-item { color: #F1E8D8; font-size: .8rem; }
+    .ticker-item b { color: var(--mustard); margin-right: 9px; font-family: var(--mono); font-size: .69rem; }
+    @keyframes tickerMove { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    .season-map-card { padding: 18px 22px 20px; overflow: hidden; }
+    .season-svg { display: block; width: 100%; height: auto; margin-inline: auto; }
+    .season-track { fill: none; stroke: #D9CBB1; stroke-width: 4; stroke-linecap: round; stroke-dasharray: 7 8; }
+    .season-node { cursor: pointer; outline: none; }
+    .season-node .node-ring { fill: var(--paper); stroke: #BFAE95; stroke-width: 2; transition: stroke .2s ease, fill .2s ease; }
+    .season-node .node-core { fill: #D6CAB8; }
+    .season-node.current .node-ring { fill: #FFF4CF; stroke: var(--mustard); stroke-width: 4; filter: drop-shadow(0 0 5px rgba(232,181,61,.45)); }
+    .season-node.current .node-core { fill: var(--maroon); }
+    .season-node.done .node-ring { fill: var(--green-soft); stroke: #5C9C72; }
+    .season-node.done .node-core { fill: var(--green); }
+    .season-node.locked .node-core { fill: #B5AA98; }
+    .season-node:focus-visible .node-ring { stroke: var(--maroon); stroke-width: 5; }
+    .season-svg-label { fill: var(--ink); font: 700 13px var(--sans); text-anchor: middle; }
+    .season-svg-sub { fill: var(--muted); font: 11px var(--sans); text-anchor: middle; }
+    .season-panel { margin-top: 16px; padding: 20px; background: #F9F2E4; border: 1px solid #E7D9BE; border-radius: 14px; display: grid; grid-template-columns: 1fr 1.3fr; gap: 20px; }
+    .season-panel h3 { font-size: 1.35rem; margin: 7px 0 10px; }
+    .season-panel p, .season-panel li { font-size: .84rem; color: #61584D; }
+    .season-panel ul { margin: 9px 0 0; padding-left: 18px; }
+    .season-panel .mission-label { color: var(--maroon); font-size: .7rem; letter-spacing: .08em; font-family: var(--mono); font-weight: 700; text-transform: uppercase; }
+    .season-panel .deliverables { border-left: 1px solid #DFD0B6; padding-left: 22px; }
+    .board-controls { display: flex; justify-content: space-between; gap: 14px; flex-wrap: wrap; align-items: center; margin-bottom: 17px; }
+    .leaderboard { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .company-card { position: relative; padding: 18px; overflow: hidden; transform-style: preserve-3d; min-width: 0; }
+    .company-card.top { border-color: #D9B95D; background: linear-gradient(145deg, #FFFDF7, #FFF6D9); }
+    .company-card.top::after { content: ""; position: absolute; top: 0; left: 0; height: 4px; width: 100%; background: var(--mustard); }
+    .company-card .rank-pos { position: absolute; right: 15px; top: 15px; color: #8B806F; font-family: var(--mono); font-weight: 700; font-size: .75rem; }
+    .company-logo { width: 43px; height: 43px; border-radius: 12px; display: grid; place-items: center; color: var(--maroon); background: var(--mustard-soft); font-family: var(--serif); font-size: 1.25rem; font-weight: 700; margin-bottom: 15px; }
+    .company-card h3 { font-size: 1.12rem; padding-right: 26px; margin-bottom: 4px; }
+    .company-type { color: var(--muted); font-size: .75rem; }
+    .rank-badge { display: inline-flex; align-items: center; margin-top: 12px; padding: 4px 8px; color: var(--maroon); background: var(--maroon-soft); border-radius: 5px; text-transform: uppercase; font-family: var(--mono); font-size: .62rem; font-weight: 700; letter-spacing: .03em; }
+    .worth-line { margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--line); display: flex; align-items: end; justify-content: space-between; gap: 8px; }
+    .worth-line .worth { font: 700 clamp(1.15rem, 2vw, 1.6rem) var(--mono); letter-spacing: -.05em; white-space: nowrap; }
+    .worth-line .trend { font-family: var(--mono); font-size: .73rem; font-weight: 700; white-space: nowrap; }
+    .trend.up { color: var(--green); }
+    .trend.down { color: var(--maroon); }
+    .trend.flat { color: var(--muted); }
+    .company-card .view-company { width: 100%; margin-top: 15px; border: 0; border-top: 1px dashed var(--line); padding: 12px 0 0; text-align: left; background: transparent; color: var(--maroon); font-weight: 800; font-size: .78rem; }
+    .company-card .view-company:hover { text-decoration: underline; }
+    .empty-state { grid-column: 1 / -1; padding: 32px; text-align: center; color: var(--muted); border: 1px dashed var(--line); border-radius: 16px; }
+    .updated-line { color: var(--muted); font-size: .73rem; }
+    .registry-toolbar { display: flex; gap: 10px; width: min(470px, 100%); }
+    .field { min-width: 0; width: 100%; padding: 12px 14px; background: #FFFDF8; border: 1px solid #D8CBB7; border-radius: 11px; color: var(--ink); }
+    .registry-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 13px; }
+    .registry-card { padding: 16px; text-align: left; width: 100%; display: block; color: var(--ink); border: 1px solid var(--line); border-radius: 15px; background: var(--paper); transition: border-color .18s ease, transform .18s ease; }
+    .registry-card:hover { border-color: var(--mustard); transform: translateY(-3px); }
+    .registry-card-head { display: flex; align-items: start; justify-content: space-between; gap: 10px; }
+    .registry-card h3 { font-size: 1.05rem; margin-bottom: 6px; }
+    .registry-card p { color: var(--muted); font-size: .76rem; margin-top: 9px; }
+    .monogram { display: grid; place-items: center; flex: 0 0 auto; height: 35px; width: 35px; border-radius: 10px; background: var(--maroon-soft); color: var(--maroon); font-family: var(--serif); font-weight: 700; }
+    .registry-role-preview { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 12px; }
+    .role-chip { padding: 4px 6px; border-radius: 5px; background: #F2EADD; color: #665848; font-size: .63rem; font-weight: 700; }
+    .draw-layout { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(270px, .9fr); gap: 20px; }
+    .news-display { padding: 25px; position: relative; overflow: hidden; background: var(--maroon); color: var(--cream); min-height: 285px; display: flex; flex-direction: column; justify-content: space-between; }
+    .news-display::before { content: "NEWS / LEGAL ALERT"; position: absolute; top: 18px; right: -30px; transform: rotate(35deg); padding: 6px 42px; background: var(--mustard); color: var(--maroon); font: 700 .63rem var(--mono); }
+    .news-display .news-kicker { color: var(--mustard); font: 700 .69rem var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+    .news-display h3 { font-size: clamp(1.5rem, 3vw, 2.2rem); max-width: 600px; margin: 13px 0; }
+    .news-display .scenario { color: #E8DCC9; font-size: .9rem; max-width: 610px; }
+    .news-display .news-bottom { margin-top: 22px; display: flex; justify-content: space-between; gap: 12px; align-items: center; flex-wrap: wrap; }
+    .news-placeholder { display: flex; justify-content: center; align-items: center; text-align: center; min-height: 220px; color: #E6D7C2; }
+    .timer-panel { padding: 23px; display: flex; flex-direction: column; justify-content: space-between; }
+    .timer-panel h3 { font-size: 1.35rem; margin: 8px 0; }
+    .timer-amount { font: 700 clamp(2rem, 4vw, 3.2rem) var(--mono); letter-spacing: -.06em; color: var(--maroon); margin: 13px 0 4px; }
+    .timer-track { height: 7px; border-radius: 99px; overflow: hidden; background: #EAE0CD; margin: 12px 0 20px; }
+    .timer-track span { display: block; height: 100%; width: 100%; background: var(--mustard); transition: width .5s linear; }
+    .answer-reveal { display: none; margin-top: 18px; padding: 16px; border-radius: 12px; background: var(--green-soft); color: #214F36; border: 1px solid #C3DFC8; }
+    .answer-reveal.show { display: block; animation: appear .3s ease both; }
+    .answer-reveal h4 { font: 800 .75rem var(--mono); text-transform: uppercase; margin-bottom: 7px; }
+    .answer-reveal p { font-size: .83rem; }
+    .deadline-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .deadline-card { padding: 18px; border-left: 4px solid var(--mustard); }
+    .deadline-card.overdue { border-color: var(--maroon); background: #F5E8E7; }
+    .deadline-card h3 { font-size: 1.08rem; margin: 12px 0 6px; }
+    .deadline-card .due-date { color: var(--muted); font-size: .76rem; }
+    .countdown { font: 700 1.15rem var(--mono); margin: 16px 0 12px; color: var(--maroon); }
+    .deadline-card.overdue .countdown { color: #5A1112; }
+    .desk-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+    .desk-item { padding: 17px; min-height: 180px; display: flex; flex-direction: column; align-items: start; }
+    .desk-icon { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: var(--mustard-soft); color: var(--maroon); font-size: 1.1rem; margin-bottom: 13px; }
+    .desk-item h3 { font-size: 1.02rem; margin-bottom: 7px; }
+    .desk-item p { color: var(--muted); font-size: .75rem; margin-bottom: 16px; }
+    .desk-item .btn { margin-top: auto; width: 100%; padding-inline: 9px; }
+    .rulebook-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .flip-wrap { perspective: 1000px; min-height: 208px; }
+    .flip-card { position: relative; width: 100%; min-height: 208px; height: 100%; transform-style: preserve-3d; transition: transform .55s cubic-bezier(.2,.7,.15,1); cursor: pointer; }
+    .flip-card.flipped { transform: rotateY(180deg); }
+    .flip-face { position: absolute; inset: 0; padding: 20px; border-radius: 16px; border: 1px solid var(--line); background: var(--paper); box-shadow: var(--shadow); backface-visibility: hidden; -webkit-backface-visibility: hidden; overflow: auto; }
+    .flip-front { display: flex; flex-direction: column; justify-content: space-between; }
+    .flip-front .flip-icon { font-size: 1.45rem; color: var(--maroon); }
+    .flip-front h3 { font-size: 1.3rem; margin-top: 14px; }
+    .flip-front p { color: var(--muted); font-size: .8rem; margin-top: 7px; }
+    .flip-hint { color: var(--maroon); font-size: .7rem; font-weight: 800; margin-top: 17px; }
+    .flip-back { transform: rotateY(180deg); background: #F8F0DF; }
+    .flip-back h3 { font-size: 1.15rem; margin-bottom: 11px; }
+    .flip-back p, .flip-back li { color: #5F5549; font-size: .8rem; }
+    .flip-back ul { padding-left: 18px; margin: 0; }
+    .game-shell { padding: 22px; }
+    .game-tabs { display: flex; gap: 7px; flex-wrap: wrap; border-bottom: 1px solid var(--line); padding-bottom: 15px; margin-bottom: 20px; }
+    .game-tab { border: 1px solid #D8CBB7; background: transparent; border-radius: 999px; padding: 9px 13px; color: var(--muted); font-size: .79rem; font-weight: 800; }
+    .game-tab.active { background: var(--maroon); border-color: var(--maroon); color: white; }
+    .game-tab.locked { opacity: .55; }
+    .game-panel { display: none; }
+    .game-panel.active { display: block; animation: appear .25s ease both; }
+    @keyframes appear { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    .game-intro { display: flex; justify-content: space-between; align-items: start; gap: 20px; margin-bottom: 18px; }
+    .game-intro h3 { font-size: 1.55rem; margin-bottom: 7px; }
+    .game-intro p { max-width: 650px; color: var(--muted); font-size: .85rem; }
+    .game-scoreboard { display: flex; gap: 9px; flex-wrap: wrap; }
+    .score-chip { padding: 9px 12px; border: 1px solid var(--line); border-radius: 10px; min-width: 84px; background: #FFFAF0; }
+    .score-chip strong { display: block; font: 700 1rem var(--mono); }
+    .score-chip span { color: var(--muted); font-size: .65rem; text-transform: uppercase; letter-spacing: .06em; }
+    .scenario-box { padding: clamp(18px, 3vw, 29px); border-radius: 16px; background: #F7F0E3; border: 1px solid #E7D8BC; }
+    .scenario-meta { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 18px; }
+    .scenario-number { font: 700 .72rem var(--mono); color: var(--maroon); }
+    .scenario-box h4 { font-size: clamp(1.2rem, 2vw, 1.55rem); margin-bottom: 11px; }
+    .scenario-box .scenario-text { color: #554C41; font-size: .95rem; max-width: 850px; }
+    .choice-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 9px; margin-top: 22px; }
+    .choice-btn { border: 1px solid #D4C3A7; background: var(--paper); border-radius: 10px; padding: 12px; text-align: left; color: var(--ink); font-size: .82rem; font-weight: 800; transition: border-color .16s ease, background .16s ease; }
+    .choice-btn:hover:not(:disabled) { border-color: var(--mustard); background: #FFF7DC; }
+    .choice-btn:disabled { cursor: default; }
+    .choice-btn.correct { border-color: #72A883; background: var(--green-soft); color: #1E5A39; }
+    .choice-btn.incorrect { border-color: #C78680; background: #F7E6E4; color: #6A1B1A; }
+    .feedback-box { display: none; margin-top: 17px; border-radius: 11px; padding: 15px; border: 1px solid #D7C8AD; background: white; }
+    .feedback-box.show { display: block; animation: appear .25s ease both; }
+    .feedback-box h4 { font-size: 1rem; margin-bottom: 5px; }
+    .feedback-box p { color: var(--muted); font-size: .83rem; }
+    .game-actions { display: flex; justify-content: space-between; gap: 10px; margin-top: 17px; align-items: center; flex-wrap: wrap; }
+    .veil-options { display: flex; gap: 10px; margin-top: 21px; flex-wrap: wrap; }
+    .veil-options .btn { flex: 1 1 170px; }
+    .veil-result { display: none; margin-top: 17px; border: 1px solid #D7C8AD; border-radius: 12px; padding: 16px; background: white; }
+    .veil-result.show { display: block; animation: appear .25s ease both; }
+    .veil-result h4 { margin-bottom: 8px; font-size: 1.1rem; }
+    .veil-result p { color: #5B5145; font-size: .84rem; margin-top: 7px; }
+    .locked-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 24px; }
+    .locked-game { position: relative; min-height: 145px; padding: 17px; border-radius: 14px; border: 1px dashed #CCBDA5; background: #F7F0E4; color: #82796D; }
+    .locked-game .lock-symbol { font-size: 1.1rem; }
+    .locked-game h4 { font-size: 1rem; color: #655B50; margin: 10px 0 7px; }
+    .locked-game p { font-size: .74rem; }
+    .locked-game .unlock { display: inline-block; margin-top: 12px; font: 700 .64rem var(--mono); color: var(--maroon); text-transform: uppercase; }
+    footer { background: #251A18; color: var(--cream); padding: 29px 0; }
+    .footer-inner { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
+    .footer-brand { display: flex; align-items: center; gap: 11px; font-size: .88rem; }
+    .footer-brand .brand-mark { width: 38px; height: 38px; font-size: 1.55rem; }
+    footer p { color: #D6C7AF; font-size: .76rem; }
+    .modal-backdrop { position: fixed; inset: 0; z-index: 999; padding: 18px; display: none; align-items: center; justify-content: center; background: rgba(30, 18, 16, .72); }
+    .modal-backdrop.open { display: flex; animation: appear .2s ease both; }
+    .modal { width: min(650px, 100%); max-height: 88%; overflow: auto; border-radius: 20px; background: var(--paper); padding: clamp(20px, 4vw, 30px); box-shadow: 0 24px 70px rgba(0,0,0,.3); }
+    .modal-head { display: flex; justify-content: space-between; align-items: start; gap: 16px; margin-bottom: 19px; }
+    .modal-head h3 { font-size: 1.7rem; margin-top: 7px; }
+    .icon-btn { border: 1px solid var(--line); width: 38px; height: 38px; flex: 0 0 auto; border-radius: 50%; background: transparent; color: var(--maroon); font-size: 1.25rem; }
+    .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 19px 0; }
+    .modal-stat { padding: 13px; border-radius: 11px; background: #F8F0DF; }
+    .modal-stat span { display: block; color: var(--muted); font-size: .7rem; text-transform: uppercase; letter-spacing: .05em; }
+    .modal-stat strong { display: block; margin-top: 5px; font: 700 1.05rem var(--mono); }
+    .modal h4 { font-size: 1.05rem; margin: 20px 0 10px; }
+    .member-list, .modal-roles { display: flex; flex-wrap: wrap; gap: 7px; }
+    .member-chip { background: #EFE6D5; border-radius: 7px; padding: 7px 9px; font-size: .76rem; }
+    .modal-role-row { display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--line); font-size: .8rem; }
+    .modal-role-row span:first-child { color: var(--muted); }
+    .toast { position: fixed; bottom: 18px; left: 50%; transform: translate(-50%, 15px); z-index: 1200; max-width: calc(100% - 30px); background: #251A18; color: white; border: 1px solid rgba(232,181,61,.55); padding: 12px 16px; border-radius: 10px; font-size: .82rem; opacity: 0; pointer-events: none; transition: opacity .25s ease, transform .25s ease; }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+    .loading-dot { display: inline-block; height: 7px; width: 7px; background: var(--mustard); border-radius: 50%; margin-right: 6px; }
+    .source-status { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 16px; color: var(--muted); font-size: .72rem; }
+    .back-to-top { position: fixed; right: 15px; bottom: 17px; z-index: 50; border: 1px solid rgba(255,255,255,.5); background: var(--maroon); color: white; width: 42px; height: 42px; border-radius: 50%; box-shadow: var(--shadow); opacity: .9; }
+    @media (max-width: 900px) {
+      .hero-grid { grid-template-columns: 1fr; gap: 28px; }
+      .hero-stat-panel { max-width: 590px; }
+      .leaderboard { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .registry-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .desk-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .deadline-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .draw-layout { grid-template-columns: 1fr; }
+      .season-panel { grid-template-columns: 1fr; }
+      .season-panel .deliverables { border-left: 0; border-top: 1px solid #DFD0B6; padding: 16px 0 0; }
+    }
+    @media (max-width: 640px) {
+      .shell { width: min(100% - 24px, 1200px); }
+      .section { padding: 43px 0; }
+      .section-head { display: block; margin-bottom: 22px; }
+      .section-note { margin-top: 12px; }
+      .topbar { align-items: start; }
+      .top-actions { justify-content: end; }
+      .top-actions .btn { font-size: .72rem; padding: 9px 11px; }
+      .brand-sub { display: none; }
+      .brand-mark { width: 39px; height: 39px; }
+      .hero h1 { font-size: clamp(2.7rem, 13vw, 4.5rem); }
+      .hero-stat-panel { padding: 17px; }
+      .hero-stats { gap: 14px; }
+      .hero-stat strong { font-size: 1.7rem; }
+      .season-map-card { padding: 9px 7px 14px; }
+      .season-svg-label { font-size: 12px; }
+      .season-svg-sub { font-size: 10px; }
+      .leaderboard { grid-template-columns: 1fr; }
+      .company-card { padding: 17px; }
+      .registry-toolbar { width: 100%; }
+      .registry-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+      .registry-card { padding: 12px; }
+      .registry-card h3 { font-size: .95rem; }
+      .role-chip { font-size: .6rem; }
+      .deadline-grid { grid-template-columns: 1fr; }
+      .desk-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .desk-item { min-height: 170px; padding: 13px; }
+      .rulebook-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+      .flip-wrap, .flip-card { min-height: 230px; }
+      .flip-face { padding: 15px; }
+      .flip-front h3 { font-size: 1.12rem; }
+      .flip-front p { font-size: .75rem; }
+      .game-shell { padding: 13px; }
+      .game-intro { display: block; }
+      .game-scoreboard { margin-top: 14px; }
+      .choice-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .choice-btn { padding: 11px 9px; font-size: .76rem; }
+      .locked-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .news-display { padding: 20px; }
+      .timer-panel { padding: 19px; }
+      .modal-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 380px) {
+      .registry-grid, .rulebook-grid, .desk-grid, .locked-grid { grid-template-columns: 1fr; }
+      .flip-wrap, .flip-card { min-height: 190px; }
+      .course-line { font-size: .77rem; }
+      .choice-grid { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero" id="top">
+    <div class="shell">
+      <div class="topbar">
+        <div class="brand" aria-label="Company House">
+          <div class="brand-mark" aria-hidden="true">द</div>
+          <div><div>Company House</div><div class="brand-sub">A corporate law simulation</div></div>
+        </div>
+        <div class="top-actions">
+          <a class="btn" href="#game-zone">Enter Game Zone <span aria-hidden="true">↗</span></a>
+          <button class="btn" id="refreshDataBtn" type="button">↻ Refresh Sheets</button>
+        </div>
+      </div>
+      <div class="hero-grid">
+        <div>
+          <div class="eyebrow">A semester inside the boardroom</div>
+          <h1>Company <span>House</span></h1>
+          <p class="hero-sub">Don't study company law. Run a company under it.</p>
+          <div class="course-line"><strong>Corporate Law and Administration</strong><span class="dot">●</span><span>COM102-2</span><span class="dot">●</span><span>CHRIST, Bengaluru</span></div>
+        </div>
+        <aside class="hero-stat-panel" aria-label="Current classroom standings">
+          <div class="hero-stat-head"><span>Classroom status</span><span class="pill" id="heroSeasonPill">Season 1: Incorporation</span></div>
+          <div class="hero-stats">
+            <div class="hero-stat"><strong id="heroCompanyCount">14</strong><span>companies on the register</span></div>
+            <div class="hero-stat"><strong id="heroTotalWorth">₹1,381 cr</strong><span>combined virtual net worth</span></div>
+          </div>
+          <div class="hero-footnote">File carefully. Govern responsibly. Grow your net worth.</div>
+        </aside>
+      </div>
+    </div>
+  </header>
+
+  <div class="ticker-shell" aria-label="Breaking news ticker">
+    <div class="ticker-row"><div class="ticker-tag">Market Wire</div><div class="ticker-window"><div class="ticker-track" id="tickerTrack"><span class="ticker-item"><b>HOUSE RULE</b> Build value through sound legal decisions.</span><span class="ticker-item"><b>REGISTRAR</b> First-time approved filing earns ₹3 cr.</span><span class="ticker-item"><b>BOARDROOM</b> A reasoned dissent can earn ₹1 cr.</span><span class="ticker-item"><b>COMPLIANCE</b> Missed legal steps cost ₹2 cr.</span><span class="ticker-item"><b>HOUSE RULE</b> Build value through sound legal decisions.</span><span class="ticker-item"><b>REGISTRAR</b> First-time approved filing earns ₹3 cr.</span><span class="ticker-item"><b>BOARDROOM</b> A reasoned dissent can earn ₹1 cr.</span><span class="ticker-item"><b>COMPLIANCE</b> Missed legal steps cost ₹2 cr.</span></div></div></div>
+  </div>
+
+  <main>
+    <section class="section" id="season-map">
+      <div class="shell">
+        <div class="section-head"><div class="intro"><div class="eyebrow">Your semester journey</div><h2>Five seasons. One company.</h2></div><p class="section-note">Choose a season to open its mission. Your company carries its record forward from incorporation to the final boardroom decision.</p></div>
+        <div class="season-map-card card">
+          <svg class="season-svg" viewBox="0 0 900 220" role="group" aria-label="Five season journey map. Select a season for details.">
+            <path class="season-track" d="M98 72 C160 22 213 22 274 72 S390 122 450 72 S565 22 626 72 S740 122 802 72" />
+            <g class="season-node current" data-season="1" role="button" tabindex="0" aria-label="Open Season 1, Incorporation">
+              <circle class="node-ring" cx="98" cy="72" r="31"/><circle class="node-core" cx="98" cy="72" r="23"/><text x="98" y="79" text-anchor="middle" fill="#FFFBF0" font-size="19" font-weight="700">1</text>
+              <text class="season-svg-label" x="98" y="132">Incorporation</text><text class="season-svg-sub" x="98" y="151">Weeks 1 to 3</text>
+            </g>
+            <g class="season-node locked" data-season="2" role="button" tabindex="0" aria-label="Open Season 2, The Charter">
+              <circle class="node-ring" cx="274" cy="72" r="29"/><circle class="node-core" cx="274" cy="72" r="21"/><text x="274" y="79" text-anchor="middle" fill="#FFFBF0" font-size="18" font-weight="700">2</text>
+              <text class="season-svg-label" x="274" y="132">The Charter</text><text class="season-svg-sub" x="274" y="151">Weeks 4 to 6</text>
+            </g>
+            <g class="season-node locked" data-season="3" role="button" tabindex="0" aria-label="Open Season 3, The Boardroom">
+              <circle class="node-ring" cx="450" cy="72" r="29"/><circle class="node-core" cx="450" cy="72" r="21"/><text x="450" y="79" text-anchor="middle" fill="#FFFBF0" font-size="18" font-weight="700">3</text>
+              <text class="season-svg-label" x="450" y="132">The Boardroom</text><text class="season-svg-sub" x="450" y="151">Weeks 7 to 11</text>
+            </g>
+            <g class="season-node locked" data-season="4" role="button" tabindex="0" aria-label="Open Season 4, Profits">
+              <circle class="node-ring" cx="626" cy="72" r="29"/><circle class="node-core" cx="626" cy="72" r="21"/><text x="626" y="79" text-anchor="middle" fill="#FFFBF0" font-size="18" font-weight="700">4</text>
+              <text class="season-svg-label" x="626" y="132">Profits</text><text class="season-svg-sub" x="626" y="151">Weeks 12 to 13</text>
+            </g>
+            <g class="season-node locked" data-season="5" role="button" tabindex="0" aria-label="Open Season 5, Survival">
+              <circle class="node-ring" cx="802" cy="72" r="29"/><circle class="node-core" cx="802" cy="72" r="21"/><text x="802" y="79" text-anchor="middle" fill="#FFFBF0" font-size="18" font-weight="700">5</text>
+              <text class="season-svg-label" x="802" y="132">Survival</text><text class="season-svg-sub" x="802" y="151">Weeks 14 to 15</text>
+            </g>
+            <text x="450" y="199" text-anchor="middle" fill="#847767" font-size="10" font-family="Space Mono, monospace">SELECT A NODE TO VIEW THE MISSION</text>
+          </svg>
+          <div class="season-panel" id="seasonPanel" aria-live="polite">
+            <div><div class="mission-label" id="seasonPanelKicker">Season 1 mission</div><h3 id="seasonPanelTitle">Register your company.</h3><p id="seasonPanelDescription">The Registrar reviews your filings. One missing detail can cost time and net worth.</p><p style="margin-top:10px"><span class="tiny-label">Unit mapping</span><br><strong id="seasonPanelUnit">Unit 1: Incorporation</strong></p></div>
+            <div class="deliverables"><div class="mission-label">Mission deliverables</div><ul id="seasonPanelDeliverables"><li>Submit a registration application.</li><li>Resolve the pre-incorporation contract twist.</li><li>Secure first-time approval.</li></ul><p style="margin-top:12px"><span class="tiny-label">Weeks</span> <strong id="seasonPanelWeeks">1 to 3</strong></p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="leaderboard">
+      <div class="shell">
+        <div class="section-head"><div class="intro"><div class="eyebrow">The live market</div><h2>Net worth leaderboard</h2></div><p class="section-note">Every legal decision moves the ledger. Rankings use starting net worth plus the recorded ledger entries.</p></div>
+        <div class="board-controls"><div><span class="pill" id="leaderboardCount">14 companies</span> <span class="updated-line" id="lastUpdated">Last updated: waiting for data</span></div><span class="tiny-label">Virtual value in ₹ crore</span></div>
+        <div class="leaderboard" id="leaderboardGrid" aria-live="polite"><div class="empty-state">Loading the company ledger...</div></div>
+        <div class="source-status"><span id="sourceStatus"><span class="loading-dot"></span>Preparing classroom data</span><span>Trend compares the current total with the total before the last 7 days.</span></div>
+      </div>
+    </section>
+
+    <section class="section" id="registry">
+      <div class="shell">
+        <div class="section-head"><div class="intro"><div class="eyebrow">Registrar's register</div><h2>Company registry</h2></div><p class="section-note">Find a company, review its profile, and check the current season's roles. Select any profile to open the full record.</p></div>
+        <div class="board-controls"><div class="registry-toolbar"><input class="field" id="companySearch" type="search" placeholder="Search company, tagline or member" aria-label="Search companies"><select class="field" id="companyTypeFilter" aria-label="Filter by company type" style="max-width:180px"><option value="all">All types</option><option>Private Limited</option><option>Public Limited</option><option>One Person Company</option><option>Section 8 Company</option><option>LLP</option></select></div><span class="updated-line" id="registryResultCount">Showing 14 companies</span></div>
+        <div class="registry-grid" id="registryGrid"><div class="empty-state">Loading the register...</div></div>
+      </div>
+    </section>
+
+    <section class="section" id="breaking-news">
+      <div class="shell">
+        <div class="section-head"><div class="intro"><div class="eyebrow">Breaking news desk</div><h2>When the market calls, respond.</h2></div><p class="section-note">Draw an event card, discuss the legal step with your team, and let the teacher reveal the answer after the round.</p></div>
+        <div class="draw-layout">
+          <article class="news-display card" id="newsDisplay" aria-live="polite"><div><div class="news-kicker" id="newsKicker">This week's event file</div><h3 id="newsHeadline">A surprise arrives at the boardroom.</h3><p class="scenario" id="newsScenario">Draw a card to reveal the business situation and the legal decision your team must make.</p></div><div class="news-bottom"><span class="pill" id="newsSections">Corporate law simulation</span><button class="btn mustard" type="button" id="drawNewsBtn">Draw a card ↗</button></div></article>
+          <aside class="timer-panel card"><div><div class="eyebrow">Team response window</div><h3>15 minutes to decide.</h3><div class="timer-amount" id="newsTimer" aria-live="polite">15:00</div><p class="updated-line" id="timerStatus">The clock starts when a card is drawn.</p><div class="timer-track"><span id="timerProgress"></span></div><button class="btn secondary" type="button" id="revealAnswerBtn" disabled>Reveal legal answer</button><div class="answer-reveal" id="legalAnswerReveal"><h4>Teacher's legal note</h4><p id="legalAnswerText"></p></div></div><p class="updated-line" style="margin-top:22px">Teacher prompt: ask for the section, the risk, and the next compliant action.</p></aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="calendar">
+      <div class="shell">
+        <div class="section-head"><div class="intro"><div class="eyebrow">Never miss a filing</div><h2>Compliance calendar</h2></div><p class="section-note">Deadlines update automatically. Overdue filings turn maroon. Demo dates are placeholders until you connect the deadline sheet.</p></div>
+        <div class="deadline-grid" id="deadlineGrid"><div class="empty-state">Loading deadlines...</div></div>
+      </div>
+    </section>
+
+    <section class="section" id="registrar-desk">
+      <div class="shell">
+        <div class="section-head"><div class="intro"><div class="eyebrow">Registrar desk</div><h2>Make the filing count.</h2></div><p class="section-note">Use the official class forms for each filing. Add your Google Form links in the CONFIG block before sharing this page with students.</p></div>
+        <div class="desk-grid">
+          <article class="desk-item card"><div class="desk-icon" aria-hidden="true">▤</div><h3>Registration Application</h3><p>Company details, subscribers, and incorporation documents.</p><button class="btn secondary open-form" data-form="registration" type="button">Open filing ↗</button></article>
+          <article class="desk-item card"><div class="desk-icon" aria-hidden="true">⌘</div><h3>Charter Filing</h3><p>Memorandum and Articles of Association.</p><button class="btn secondary open-form" data-form="charter" type="button">Open filing ↗</button></article>
+          <article class="desk-item card"><div class="desk-icon" aria-hidden="true">▦</div><h3>Board Minutes and Resolutions</h3><p>Record decisions, dissent, and governance checks.</p><button class="btn secondary open-form" data-form="minutes" type="button">Open filing ↗</button></article>
+          <article class="desk-item card"><div class="desk-icon" aria-hidden="true">₹</div><h3>Dividend Declaration</h3><p>Check profits, reserves, and the legal process.</p><button class="btn secondary open-form" data-form="dividend" type="button">Open filing ↗</button></article>
+          <article class="desk-item card"><div class="desk-icon" aria-hidden="true">▧</div><h3>Board's Report</h3><p>Summarise governance, performance, and compliance.</p><button class="btn secondary open-form" data-form="report" type="button">Open filing ↗</button></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="rulebook">
+      <div class="shell">
+        <div class="section-head"><div class="intro"><div class="eyebrow">Read the rules before you play</div><h2>The Company House rulebook</h2></div><p class="section-note">Tap each card to turn it over. Teams can earn value, but repeated legal mistakes will cost them.</p></div>
+        <div class="rulebook-grid" id="rulebookGrid">
+          <div class="flip-wrap"><div class="flip-card" role="button" tabindex="0" aria-label="Flip role seats card"><div class="flip-face flip-front"><div><span class="flip-icon">♙</span><h3>Six role seats</h3><p>Everyone rotates through a role across the seasons.</p></div><span class="flip-hint">TAP TO REVEAL ↗</span></div><div class="flip-face flip-back"><h3>Role seats</h3><ul><li>Managing Director</li><li>Company Secretary</li><li>CFO</li><li>Independent Director</li><li>Legal Counsel</li><li>CSR Head</li></ul></div></div></div>
+          <div class="flip-wrap"><div class="flip-card" role="button" tabindex="0" aria-label="Flip company ranks card"><div class="flip-face flip-front"><div><span class="flip-icon">♜</span><h3>Rank by net worth</h3><p>Your rank is based on your current virtual net worth.</p></div><span class="flip-hint">TAP TO REVEAL ↗</span></div><div class="flip-face flip-back"><h3>Rank ladder</h3><ul><li>Startup: below ₹25 cr</li><li>Private Ltd: ₹25 cr to below ₹50 cr</li><li>Public Ltd: ₹50 cr to below ₹100 cr</li><li>Listed: ₹100 cr to below ₹200 cr</li><li>Blue Chip: ₹200 cr and above</li></ul></div></div></div>
+          <div class="flip-wrap"><div class="flip-card" role="button" tabindex="0" aria-label="Flip scoring rules card"><div class="flip-face flip-front"><div><span class="flip-icon">₹</span><h3>Every choice is on the ledger</h3><p>Sound legal work pays. Non-compliance has a cost.</p></div><span class="flip-hint">TAP TO REVEAL ↗</span></div><div class="flip-face flip-back"><h3>Scoring rules</h3><ul><li>First-time approved filing: +₹3 cr</li><li>Rejected filing, resubmit: −₹1 cr</li><li>Late filing: −₹0.5 cr per day</li><li>Winning a game round: +₹1 to ₹2 cr</li><li>Correct Breaking News response: +₹3 cr</li><li>Wrong or missed legal step: −₹2 cr</li><li>Successful Ultra Vires Raid: +₹3 cr transferred from target</li><li>Best role play by class vote: +₹2 cr</li><li>Valid Independent Director dissent: +₹1 cr</li></ul></div></div></div>
+          <div class="flip-wrap"><div class="flip-card" role="button" tabindex="0" aria-label="Flip fairness rules card"><div class="flip-face flip-front"><div><span class="flip-icon">⚖</span><h3>Fair play guardrails</h3><p>Compete hard. Keep the learning fair.</p></div><span class="flip-hint">TAP TO REVEAL ↗</span></div><div class="flip-face flip-back"><h3>Fairness rules</h3><ul><li>Gain cap per session.</li><li>Second Chance deck for lower-ranked teams.</li><li>Within-team peer ratings contribute to individual marks.</li><li>Game points are not written to the Sheet.</li><li>Teacher enters winning teams in the ledger manually.</li></ul></div></div></div>
+          <div class="flip-wrap"><div class="flip-card" role="button" tabindex="0" aria-label="Flip five seasons card"><div class="flip-face flip-front"><div><span class="flip-icon">⌁</span><h3>Five seasons</h3><p>Build, govern, share profits, and survive.</p></div><span class="flip-hint">TAP TO REVEAL ↗</span></div><div class="flip-face flip-back"><h3>Season missions</h3><ul><li>1. Incorporation</li><li>2. The Charter</li><li>3. The Boardroom</li><li>4. Profits</li><li>5. Survival</li></ul><p style="margin-top:10px">The finale crowns the Blue Chip company of the year.</p></div></div></div>
+          <div class="flip-wrap"><div class="flip-card" role="button" tabindex="0" aria-label="Flip how net worth works card"><div class="flip-face flip-front"><div><span class="flip-icon">▤</span><h3>How net worth works</h3><p>Make each decision traceable.</p></div><span class="flip-hint">TAP TO REVEAL ↗</span></div><div class="flip-face flip-back"><h3>Ledger formula</h3><p>Net Worth = starting net worth of ₹10 crore plus the sum of recorded ledger amounts.</p><p style="margin-top:10px">Trend compares the current total with the total excluding entries from the last 7 days. Teachers post awarded points to the ledger.</p></div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="game-zone">
+      <div class="shell">
+        <div class="section-head"><div class="intro"><div class="eyebrow">Practice before the board meeting</div><h2>Game zone</h2></div><p class="section-note">Play as a class or a team. Scores stay on this screen only. The teacher records awarded ledger points separately.</p></div>
+        <div class="game-shell card">
+          <div class="game-tabs" role="tablist" aria-label="Game selection">
+            <button class="game-tab active" id="tab-company" type="button" role="tab" aria-selected="true" aria-controls="game-company" data-game="company">Which Company Am I?</button>
+            <button class="game-tab" id="tab-veil" type="button" role="tab" aria-selected="false" aria-controls="game-veil" data-game="veil">Lift the Veil or Not?</button>
+            <button class="game-tab locked" type="button" data-locked-game="Doctrine Detective" data-unlock="2">🔒 Doctrine Detective</button>
+            <button class="game-tab locked" type="button" data-locked-game="Disqualified!" data-unlock="3">🔒 Disqualified!</button>
+            <button class="game-tab locked" type="button" data-locked-game="Ordinary or Special?" data-unlock="3">🔒 Ordinary or Special?</button>
+            <button class="game-tab locked" type="button" data-locked-game="Quorum Calculator" data-unlock="3">🔒 Quorum Calculator</button>
+            <button class="game-tab locked" type="button" data-locked-game="Dividend Timeline Race" data-unlock="4">🔒 Dividend Timeline Race</button>
+            <button class="game-tab locked" type="button" data-locked-game="IBC Escape Room" data-unlock="5">🔒 IBC Escape Room</button>
+          </div>
+          <section class="game-panel active" id="game-company" role="tabpanel" aria-labelledby="tab-company">
+            <div class="game-intro"><div><h3>Which Company Am I?</h3><p>Read the situation and tap the legal form that fits best. Every answer shows its statutory anchor and a short reason.</p></div><div class="game-scoreboard"><div class="score-chip"><strong id="companyGameScore">0</strong><span>Score</span></div><div class="score-chip"><strong id="companyGameStreak">0</strong><span>Streak</span></div><div class="score-chip"><strong id="companyGameTime">00:00</strong><span>Elapsed</span></div></div></div>
+            <div class="scenario-box" id="companyScenarioBox"><div class="scenario-meta"><span class="scenario-number" id="companyScenarioNumber">SCENARIO 01 OF 12</span><span class="pill" id="companyGameStatus">Ready to play</span></div><h4 id="companyScenarioTitle">The solo founder</h4><p class="scenario-text" id="companyScenarioText">A founder in Jaipur wants to run a handicraft brand alone, with the business registered as a company.</p><div class="choice-grid" id="companyChoices"></div><div class="feedback-box" id="companyFeedback" aria-live="polite"><h4 id="companyFeedbackTitle">Correct answer</h4><p id="companyFeedbackText"></p></div><div class="game-actions"><span class="updated-line" id="companyGameProgress">A correct answer adds 10 classroom points.</span><button class="btn" type="button" id="nextCompanyScenario" disabled>Next scenario →</button></div></div>
+          </section>
+          <section class="game-panel" id="game-veil" role="tabpanel" aria-labelledby="tab-veil">
+            <div class="game-intro"><div><h3>Lift the Veil or Not?</h3><p>Decide whether a court should look beyond the company's separate legal identity on these facts. Then inspect the case or principle anchor.</p></div><div class="game-scoreboard"><div class="score-chip"><strong id="veilGameScore">0</strong><span>Score</span></div><div class="score-chip"><strong id="veilGameProgress">1 / 6</strong><span>Scenario</span></div></div></div>
+            <div class="scenario-box"><div class="scenario-meta"><span class="scenario-number" id="veilScenarioNumber">VEIL TEST 01 OF 06</span><span class="pill maroon">Corporate personality</span></div><h4 id="veilScenarioTitle">Separate legal identity</h4><p class="scenario-text" id="veilScenarioText">A company has been incorporated properly, runs a real business, and incurs a commercial debt. The owner argues that the company and the owner are separate legal persons.</p><div class="veil-options"><button class="btn" type="button" data-veil-choice="lift">Lift the veil</button><button class="btn secondary" type="button" data-veil-choice="respect">Respect the veil</button></div><div class="veil-result" id="veilResult" aria-live="polite"><h4 id="veilResultTitle">Principle</h4><p id="veilResultText"></p><p><strong>Anchor:</strong> <span id="veilResultAnchor"></span></p></div><div class="game-actions"><span class="updated-line" id="veilProgressText">Choose an answer to see the legal reasoning.</span><button class="btn" type="button" id="nextVeilScenario" disabled>Next scenario →</button></div></div>
+          </section>
+          <div class="locked-grid" aria-label="Games that unlock in later seasons">
+            <article class="locked-game"><span class="lock-symbol">🔒</span><h4>Doctrine Detective</h4><p>Spot the legal principle hiding in a company dispute.</p><span class="unlock">Unlocks in Season 2</span></article>
+            <article class="locked-game"><span class="lock-symbol">🔒</span><h4>Disqualified!</h4><p>Test director eligibility through short fact patterns.</p><span class="unlock">Unlocks in Season 3</span></article>
+            <article class="locked-game"><span class="lock-symbol">🔒</span><h4>Ordinary or Special?</h4><p>Choose the correct company resolution.</p><span class="unlock">Unlocks in Season 3</span></article>
+            <article class="locked-game"><span class="lock-symbol">🔒</span><h4>Quorum Calculator</h4><p>Test board meeting attendance and quorum.</p><span class="unlock">Unlocks in Season 3</span></article>
+            <article class="locked-game"><span class="lock-symbol">🔒</span><h4>Dividend Timeline Race</h4><p>Put dividend compliance steps in the right order.</p><span class="unlock">Unlocks in Season 4</span></article>
+            <article class="locked-game"><span class="lock-symbol">🔒</span><h4>IBC Escape Room</h4><p>Navigate insolvency and resolution decisions.</p><span class="unlock">Unlocks in Season 5</span></article>
+          </div>
+        </div>
+        <p class="updated-line" style="margin-top:13px">Classroom simulation only. Check the prescribed bare Act and course material for detailed legal requirements.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer><div class="shell footer-inner"><div class="footer-brand"><div class="brand-mark" aria-hidden="true">द</div><div><strong>Company House</strong><p>Corporate Law and Administration, COM102-2</p></div></div><p>With love, Dinesh Sir</p></div></footer>
+
+  <div class="modal-backdrop" id="companyModalBackdrop" role="presentation"><section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalCompanyName"><div class="modal-head"><div><div class="eyebrow">Company profile</div><h3 id="modalCompanyName">Company name</h3><p id="modalCompanyTagline" style="color:var(--muted);font-size:.84rem;margin-top:8px"></p></div><button class="icon-btn" id="closeCompanyModal" type="button" aria-label="Close company profile">×</button></div><div class="modal-grid"><div class="modal-stat"><span>Net worth</span><strong id="modalCompanyWorth">₹10 cr</strong></div><div class="modal-stat"><span>Current rank</span><strong id="modalCompanyRank">Startup</strong></div><div class="modal-stat"><span>Legal form</span><strong id="modalCompanyType">Private Limited</strong></div><div class="modal-stat"><span>Last 7 day trend</span><strong id="modalCompanyTrend">+₹0 cr</strong></div></div><h4>Team members</h4><div class="member-list" id="modalCompanyMembers"></div><h4>Current role allocation</h4><div id="modalCompanyRoles"></div></section></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <button class="back-to-top" type="button" id="backToTop" aria-label="Back to top">↑</button>
+
+  <script>
+    /* ==================== CONFIG: EDIT THESE VALUES ==================== */
+    const CONFIG = {
+      CURRENT_SEASON: 1, // Set this to 1, 2, 3, 4, or 5 as the course progresses.
+      SHEET_COMPANIES_CSV_URL: "", // Published CSV URL for the Companies tab.
+      SHEET_LEDGER_CSV_URL: "",   // Published CSV URL for the Ledger tab.
+      SHEET_NEWS_CSV_URL: "",     // Published CSV URL for the News tab.
+      SHEET_DEADLINES_CSV_URL: "",// Published CSV URL for the Deadlines tab.
+      FORM_URLS: {                 // Paste each Google Form URL here.
+        registration: "",
+        charter: "",
+        minutes: "",
+        dividend: "",
+        report: ""
+      },
+      STARTING_NET_WORTH: 10
+    };
+
+    /* ==================== DEMO DATA: FALLBACK FOR FIRST LOAD ==================== */
+    const DEMO = (() => {
+      const companies = [
+        { company_id: "CH01", company_name: "Mango Mile Foods", company_type: "Private Limited", tagline: "Local flavour, national scale", members: ["Aarav Menon", "Ishita Rao", "Kabir Shah", "Meera Nair", "Rohan Iyer", "Sana Khan"] },
+        { company_id: "CH02", company_name: "Namma Solar Works", company_type: "Private Limited", tagline: "Clean energy for every roof", members: ["Ananya Das", "Dev Kulkarni", "Farah Ali", "Kunal Jain", "Nidhi Shetty", "Varun Bose"] },
+        { company_id: "CH03", company_name: "Deccan Loom Collective", company_type: "Section 8 Company", tagline: "Craft with a wider purpose", members: ["Aditi Rao", "Bhavesh Patel", "Charu Menon", "Dhruv Sen", "Gauri Naidu", "Imran Khan"] },
+        { company_id: "CH04", company_name: "Filter Kaapi Labs", company_type: "Private Limited", tagline: "A better brew, built in Bengaluru", members: ["Ira Krishnan", "Jay Prakash", "Kavya Pillai", "Manav Rao", "Neha Thomas", "Pranav Reddy"] },
+        { company_id: "CH05", company_name: "Blue Banyan Mobility", company_type: "Public Limited", tagline: "Smarter movement for growing cities", members: ["Reyansh Kapoor", "Sia Bhat", "Tara George", "Uday Mishra", "Veda Soman", "Yash Kulkarni"] },
+        { company_id: "CH06", company_name: "Saffron Route Retail", company_type: "Private Limited", tagline: "Everyday goods, thoughtful choices", members: ["Arjun Dutta", "Diya Fernandes", "Harsh Venkatesh", "Lavanya Pai", "Mihir Shah", "Pooja Nair"] },
+        { company_id: "CH07", company_name: "Aarogya Basket", company_type: "Private Limited", tagline: "Wellness made more accessible", members: ["Adil Mirza", "Bhavna Menon", "Eshan Gupta", "Jhanvi Roy", "Naveen Hegde", "Ritika Paul"] },
+        { company_id: "CH08", company_name: "Kaveri Cloud Systems", company_type: "Public Limited", tagline: "Digital tools for real businesses", members: ["Aman Verma", "Bina Mathew", "Chirag Rao", "Esha Kulkarni", "Neil D'Souza", "Sara Joseph"] },
+        { company_id: "CH09", company_name: "Pink City Packaging", company_type: "Private Limited", tagline: "Better packs, less waste", members: ["Akash Sinha", "Diya Shah", "Krish Babu", "Maya Iyer", "Raghav Das", "Trisha Paul"] },
+        { company_id: "CH10", company_name: "Indus FinServe", company_type: "Public Limited", tagline: "Clearer finance for new India", members: ["Anvi Kapoor", "Gautam Rao", "Ishaan Bose", "Kiara Menon", "Omkar Patil", "Simran Kaur"] },
+        { company_id: "CH11", company_name: "Peepal Urban Infra", company_type: "Public Limited", tagline: "Building streets for tomorrow", members: ["Abhay Nair", "Disha Jain", "Keshav Pillai", "Mitali Sen", "Parth Shah", "Zoya Mirza"] },
+        { company_id: "CH12", company_name: "Chai Circuit", company_type: "One Person Company", tagline: "One founder, many fresh ideas", members: ["Ishaan Rao", "Kritika Das", "Lokesh Bhat", "Mansi George", "Nikhil Menon", "Reva Shah"] },
+        { company_id: "CH13", company_name: "Sahyadri BioLabs", company_type: "LLP", tagline: "Research rooted in local needs", members: ["Akhil Shetty", "Bhumi Nair", "Chetan Roy", "Deepa Rao", "Ebrahim Khan", "Tanvi Joshi"] },
+        { company_id: "CH14", company_name: "Lotus Learning Network", company_type: "Section 8 Company", tagline: "Learning that opens doors", members: ["Anika Bose", "Darshan Pai", "Ira Menon", "Mohan Das", "Naina Shah", "Pratik Jain"] }
+      ];
+      const roleNames = ["Managing Director", "Company Secretary", "CFO", "Independent Director", "Legal Counsel", "CSR Head"];
+      const roles = {};
+      companies.forEach((c, i) => { roles[c.company_id] = c.members.map((name, j) => `${name}:${roleNames[(j + i) % roleNames.length]}`); });
+      const targets = [18, 23, 33, 42, 62, 78, 91, 118, 145, 212, 248, 47, 96, 168];
+      const recent = [2, -1, 3, 1, 4, -2, 2, 5, 1, 7, 4, -1, 3, 6];
+      const ledger = [];
+      const oldDate = (daysAgo) => { const d = new Date(); d.setDate(d.getDate() - daysAgo); return d.toISOString().slice(0, 10); };
+      companies.forEach((c, i) => {
+        const totalDelta = targets[i] - CONFIG.STARTING_NET_WORTH;
+        const last = recent[i];
+        const first = Math.round((totalDelta - last) * 0.56 * 10) / 10;
+        const second = Math.round((totalDelta - last - first) * 10) / 10;
+        ledger.push({ date: oldDate(24 + (i % 5)), company_id: c.company_id, reason: "Approved milestone and contract", amount: first });
+        ledger.push({ date: oldDate(12 + (i % 4)), company_id: c.company_id, reason: "Governance and filing review", amount: second });
+        ledger.push({ date: oldDate(1 + (i % 6)), company_id: c.company_id, reason: i % 3 === 0 ? "Compliance correction" : "Recent business decision", amount: last });
+      });
+      const news = [
+        { week: "Week 1", headline: "A promoter signed before incorporation", scenario: "Your team has found a supplier contract signed in the company's name before the company legally existed. The supplier now wants performance.", legal_answer: "A company cannot simply be treated as already existing when a pre-incorporation contract was signed. Analyse who signed, the contract terms, and the applicable legal route for adoption or a fresh contract. Do not assume automatic company liability.", sections: "Incorporation, pre-incorporation contracts" },
+        { week: "Week 2", headline: "The name is too close to a registered company", scenario: "The Registrar flags your proposed name as too similar to an existing name. Your launch campaign is already scheduled.", legal_answer: "Do not treat the name reservation as a formality. Review the naming rules, choose a distinguishable alternative, and correct the application before resubmission.", sections: "Company name, registration filing" },
+        { week: "Week 3", headline: "One subscriber has not signed", scenario: "Your incorporation application is ready, but the subscriber list and supporting declarations are incomplete.", legal_answer: "Check that the required subscriber details, signatures, declarations, and attachments are complete and consistent before filing. Missing execution details can delay incorporation.", sections: "Incorporation documents, filing quality" },
+        { week: "Week 4", headline: "A new business line appears in the pitch", scenario: "A director proposes a high-growth activity that does not appear to fit the objects clause in the company's Memorandum of Association.", legal_answer: "Compare the proposal with the objects clause and the applicable law. Do not assume that commercial attractiveness makes an act authorised. Consider the consequences of acting outside the company's powers and the lawful process to amend the charter where permitted.", sections: "MOA, objects clause, ultra vires" },
+        { week: "Week 7", headline: "The Independent Director records dissent", scenario: "A proposed transaction is rushed through despite a conflict concern. The Independent Director wants the objection recorded.", legal_answer: "The director should state a clear legal and governance reason, request that it be properly recorded in the minutes, and follow the applicable duties and procedures. A reasoned dissent is different from silence or a personal disagreement.", sections: "Board process, duties, minutes" },
+        { week: "Week 12", headline: "Shareholders want a dividend now", scenario: "The company has cash in its bank account, but finance cannot confirm distributable profits and the required treatment of unpaid dividends.", legal_answer: "Cash availability alone does not establish that a dividend may be declared. Review the applicable statutory conditions, profits and reserves, approvals, payment timeline, and the unpaid dividend process before making a decision.", sections: "Dividend, unpaid dividend account, IEPF" }
+      ];
+      const deadlines = [
+        { title: "Registration application", season: 1, due_datetime: new Date(Date.now() + 3 * 86400000).toISOString(), form_key: "registration" },
+        { title: "Charter draft review", season: 2, due_datetime: new Date(Date.now() + 8 * 86400000).toISOString(), form_key: "charter" },
+        { title: "First board minutes", season: 3, due_datetime: new Date(Date.now() + 13 * 86400000).toISOString(), form_key: "minutes" },
+        { title: "Dividend declaration checklist", season: 4, due_datetime: new Date(Date.now() + 20 * 86400000).toISOString(), form_key: "dividend" },
+        { title: "Board's report submission", season: 4, due_datetime: new Date(Date.now() + 27 * 86400000).toISOString(), form_key: "report" }
+      ];
+      return { companies, roles, ledger, news, deadlines };
+    })();
+
+    const SEASONS = [
+      { name: "Incorporation", weeks: "1 to 3", unit: "Unit 1: Incorporation", mission: "Register your company.", description: "The Registrar reviews your filings. One missing detail can cost time and net worth.", deliverables: ["Submit a registration application.", "Resolve the pre-incorporation contract twist.", "Secure first-time approval."], challenge: "Registration application and pre-incorporation contract twist." },
+      { name: "The Charter", weeks: "4 to 6", unit: "Unit 2: Memorandum and Articles", mission: "Write the rules your company will live by.", description: "Draft the objects clause and internal rules, then test another company's charter for an ultra vires risk.", deliverables: ["Draft an MOA objects clause.", "Write five AOA articles, including an entrenchment clause.", "Complete the Ultra Vires Raid.", "Optional: pitch a prospectus and avoid misstatement penalties."], challenge: "Charter drafting, Ultra Vires Raid, optional prospectus pitch." },
+      { name: "The Boardroom", weeks: "7 to 11", unit: "Unit 3: Directors and meetings", mission: "Govern under pressure.", description: "Appoint directors, interview an Independent Director, run board meetings and an AGM, and respond to weekly business events.", deliverables: ["Conduct an NRC-style Independent Director interview.", "Run a board meeting and AGM role play.", "Respond to Breaking News cards.", "Record decisions and dissent in the minutes."], challenge: "Director appointment, meeting role plays, Breaking News." },
+      { name: "Profits", weeks: "12 to 13", unit: "Unit 4: Dividend and reporting", mission: "Decide what to do with the profits.", description: "Balance shareholder expectations with the legal process for dividends, unpaid amounts, and the Board's Report.", deliverables: ["Make a reasoned dividend decision.", "Map unpaid dividend account and IEPF steps.", "Submit a one-page Board's Report."], challenge: "Dividend decision, unpaid dividend trail, Board's Report." },
+      { name: "Survival", weeks: "14 to 15", unit: "Unit 5: Insolvency simulation", mission: "Survive the market crash.", description: "The weakest companies face an insolvency scenario. Other teams become creditors, resolution applicants, or the NCLT bench.", deliverables: ["Assess the insolvency situation under IBC 2016.", "Join the Committee of Creditors or bid as a resolution applicant.", "Conduct an NCLT-style final hearing.", "Crown the Blue Chip company of the year."], challenge: "Market crash, insolvency roles, NCLT hearing, final awards." }
+    ];
+
+    const COMPANY_SCENARIOS = [
+      { title: "The solo handicraft founder", text: "A Jaipur founder wants to run a block-printing brand alone through a company, with one member and limited liability as a goal.", answer: "One Person Company", section: "Section 2(62)", reason: "An OPC is a company with only one person as its member." },
+      { title: "The 230-member startup", text: "A Bengaluru startup wants restrictions on share transfers and plans to have 230 members. It asks to register as a private company without changing the plan.", answer: "Public Company", section: "Sections 2(68) and 2(71)", reason: "A private company must restrict share transfers and cannot exceed the statutory 200-member limit, subject to the Act's counting rules. A company that is not private may fall within the public company definition if the other requirements are met." },
+      { title: "The local education initiative", text: "A group wants to promote education and skill development. Any surplus will support its objects, not be distributed to members as dividends.", answer: "Section 8 Company", section: "Section 8", reason: "Section 8 supports specified charitable and similar objects, subject to its licence and conditions, and prohibits dividend distribution to members." },
+      { title: "The future land project", text: "A company has been created to hold land for a future industrial project. It has no significant accounting transaction and is not carrying on active business.", answer: "Dormant Company", section: "Section 455", reason: "A company may apply for dormant status when it is formed for a future project or to hold an asset and meets the statutory conditions." },
+      { title: "The compact family enterprise", text: "A family business wants to remain private, restrict transfer of shares, and stay within 200 members. Its scale also meets the current small-company thresholds, subject to exclusions.", answer: "Small Company", section: "Section 2(85)", reason: "Small company status depends on the statutory paid-up capital and turnover thresholds and exclusions. The thresholds used in this exercise reflect the 2022 amendment: ₹4 crore paid-up capital and ₹40 crore turnover." },
+      { title: "The ordinary share company", text: "A company does not qualify as a private company. It wants to raise capital from a broader investor base and follow the requirements that apply to public companies.", answer: "Public Company", section: "Section 2(71)", reason: "A public company is defined in relation to the Act and is not a private company. The definition also includes a subsidiary of a company that is not private." },
+      { title: "The artisan partnership", text: "Two designers create a business under a separate legal form with partners, a flexible internal agreement, and regulation under the LLP Act.", answer: "Limited Liability Partnership", section: "LLP Act, 2008", reason: "An LLP is governed by its own legislation and is not a company incorporated under the Companies Act, 2013." },
+      { title: "The one-member app studio", text: "A software founder wants a company for a single-person business. A nominee is identified as required by law, while the founder remains the sole member.", answer: "One Person Company", section: "Section 2(62)", reason: "The defining feature is one member. The nomination and other compliance requirements must also be met." },
+      { title: "The share-transfer lock", text: "A startup's articles restrict the right to transfer shares. The company has 28 members and does not invite the public to subscribe for its securities.", answer: "Private Company", section: "Section 2(68)", reason: "A private company includes transfer restrictions and a limit of 200 members, along with the Act's restriction on public invitations." },
+      { title: "The rural health mission", text: "An organisation is formed to promote health awareness and training. It seeks a Section 8 licence and applies its income only to its stated objects.", answer: "Section 8 Company", section: "Section 8", reason: "A Section 8 company may pursue permitted not-for-profit objects and cannot distribute dividends to its members." },
+      { title: "The turnover check", text: "A qualifying private company has paid-up capital of ₹3 crore and turnover of ₹35 crore. It has no disqualifying status and is not within an excluded class.", answer: "Small Company", section: "Section 2(85)", reason: "On the classroom thresholds of ₹4 crore paid-up capital and ₹40 crore turnover, it appears to meet the numerical tests. Statutory exclusions still need to be checked." },
+      { title: "The holding entity", text: "A company holds an asset for a future project and seeks dormant status. It has filed the needed application and satisfies the Act's relevant conditions.", answer: "Dormant Company", section: "Section 455", reason: "Section 455 provides a route for dormant status for a company formed for a future project or to hold an asset, subject to statutory conditions." }
+    ];
+    const COMPANY_CATEGORIES = ["One Person Company", "Private Company", "Public Company", "Small Company", "Section 8 Company", "Dormant Company", "Limited Liability Partnership"];
+    const VEIL_SCENARIOS = [
+      { title: "Separate legal identity", text: "A company was properly incorporated, runs a real business, and incurs a commercial debt. The creditor argues that the owner must automatically pay because the owner controls the company.", answer: "respect", result: "The company's separate legal personality is the starting point. Ownership or control alone does not automatically make the shareholder liable for company debts.", anchor: "Salomon v Salomon & Co Ltd (1897). Separate legal entity respected on the facts." },
+      { title: "A promise the founder wants to escape", text: "A former employee is bound by a valid non-compete obligation, then uses a company to solicit the protected business in a way designed to evade the obligation.", answer: "lift", result: "A court may look beyond the company where it is used as a device to evade an existing legal obligation. The result depends on the facts and applicable law.", anchor: "Gilford Motor Co Ltd v Horne (1933). Company used to evade a non-compete obligation." },
+      { title: "A genuine cross-border transaction", text: "An overseas group uses a genuine corporate structure in a share transaction. The structure is real, and the only argument offered is that the arrangement has tax consequences.", answer: "respect", result: "A genuine corporate structure is not disregarded merely because a tax consequence is present. The court examines the transaction and the applicable law rather than treating every structure as a sham.", anchor: "Vodafone International Holdings BV v Union of India (2012). The Supreme Court did not disregard the genuine structure on the facts before it." },
+      { title: "Assets moved to defeat creditors", text: "A company transfers assets through a controlled entity as part of a sham arrangement intended to defraud creditors and conceal the true conduct.", answer: "lift", result: "Fraud or improper conduct can justify examining the people and entities behind a structure. A court must apply the relevant legal test and evidence, not lift the veil automatically in every group-company dispute.", anchor: "LIC v Escorts Ltd (1986) recognises that the veil may be lifted in appropriate statutory, fraud, or improper-conduct circumstances." },
+      { title: "The statute asks who really controls it", text: "A compliance statute expressly requires disclosure of beneficial ownership or the persons exercising control. The company argues that separate personality prevents any inquiry.", answer: "lift", result: "Separate personality does not block an inquiry or disclosure required by statute. Apply the particular statutory provision and its test; the term veil lifting should not replace that analysis.", anchor: "Statutory ground, with LIC v Escorts Ltd (1986) as a general Indian Supreme Court anchor on when the veil may be lifted." },
+      { title: "A shell used to sidestep a legal duty", text: "A business uses an empty controlled company to evade a statutory tax obligation, frustrate a public protection rule, and conceal assets from creditors. Evidence suggests the arrangement is a sham.", answer: "lift", result: "Courts may examine the real conduct where the corporate form is used for tax evasion, to evade law, or to facilitate improper conduct. The outcome depends on the statute, evidence, and facts; public interest alone is not a blank cheque.", anchor: "General principle on evasion of legal obligations and improper conduct. No separate case name is asserted for this scenario." }
+    ];
+
+    const state = { companies: [], ledger: [], news: [], deadlines: [], roles: {}, demoInUse: true, lastUpdated: null, chosenNews: null, newsTimerEnd: null, newsTimerInterval: null, companyGameIndex: 0, companyGameScore: 0, companyGameStreak: 0, companyGameStarted: null, companyGameInterval: null, companyGameAnswered: false, veilIndex: 0, veilScore: 0, veilAnswered: false, toastTimer: null, previousRanks: {} };
+    const $ = (selector, root = document) => root.querySelector(selector);
+    const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
+    const fmtCr = (value) => `₹${Number(value).toLocaleString("en-IN", { maximumFractionDigits: 1, minimumFractionDigits: 0 })} cr`;
+    const escapeHTML = (str = "") => String(str).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    const rankOf = worth => worth < 25 ? "Startup" : worth < 50 ? "Private Ltd" : worth < 100 ? "Public Ltd" : worth < 200 ? "Listed" : "Blue Chip";
+    const rankOrder = { "Startup": 1, "Private Ltd": 2, "Public Ltd": 3, "Listed": 4, "Blue Chip": 5 };
+    const parseAmount = value => { const n = Number(String(value ?? "").replace(/[₹,\s]/g, "")); return Number.isFinite(n) ? n : 0; };
+    const normalizeCompany = row => ({ company_id: String(row.company_id || "").trim(), company_name: String(row.company_name || "Unnamed Company").trim(), company_type: String(row.company_type || "Company").trim(), tagline: String(row.tagline || "Building value through good governance").trim(), members: String(row.members || "").split(";").map(x => x.trim()).filter(Boolean) });
+
+    // CSV parser handles commas inside quoted fields and escaped quote characters.
+    function parseCSV(csv) {
+      const rows = []; let row = [], field = "", inQuotes = false;
+      for (let i = 0; i < csv.length; i++) {
+        const c = csv[i];
+        if (inQuotes) {
+          if (c === '"' && csv[i + 1] === '"') { field += '"'; i++; }
+          else if (c === '"') inQuotes = false;
+          else field += c;
+        } else if (c === '"') inQuotes = true;
+        else if (c === ",") { row.push(field); field = ""; }
+        else if (c === "\n") { row.push(field.replace(/\r$/, "")); if (row.some(v => v.trim() !== "")) rows.push(row); row = []; field = ""; }
+        else field += c;
+      }
+      if (field.length || row.length) { row.push(field.replace(/\r$/, "")); if (row.some(v => v.trim() !== "")) rows.push(row); }
+      if (!rows.length) return [];
+      const headers = rows.shift().map(h => h.trim().replace(/^\uFEFF/, ""));
+      return rows.map(values => { const item = {}; headers.forEach((h, i) => item[h] = (values[i] ?? "").trim()); return item; });
+    }
+    async function fetchCSV(url) {
+      if (!url || !url.trim()) return null;
+      try {
+        const response = await fetch(url.trim(), { cache: "no-store" });
+        if (!response.ok) return null;
+        const text = await response.text();
+        const rows = parseCSV(text);
+        return rows.length ? rows : null;
+      } catch (error) { return null; }
+    }
+    function demoNewsRows() { return DEMO.news.map(x => ({ ...x })); }
+    async function loadAllData() {
+      const [companiesCSV, ledgerCSV, newsCSV, deadlinesCSV] = await Promise.all([
+        fetchCSV(CONFIG.SHEET_COMPANIES_CSV_URL), fetchCSV(CONFIG.SHEET_LEDGER_CSV_URL), fetchCSV(CONFIG.SHEET_NEWS_CSV_URL), fetchCSV(CONFIG.SHEET_DEADLINES_CSV_URL)
+      ]);
+      const usedDemo = { companies: !companiesCSV, ledger: !ledgerCSV, news: !newsCSV, deadlines: !deadlinesCSV };
+      const companyRows = companiesCSV || DEMO.companies.map(c => ({ ...c, members: c.members.join(";") }));
+      state.companies = companyRows.map(normalizeCompany).filter(c => c.company_id && c.company_name);
+      state.ledger = (ledgerCSV || DEMO.ledger).map(r => ({ date: String(r.date || "").slice(0, 10), company_id: String(r.company_id || "").trim(), reason: String(r.reason || "Ledger entry"), amount: parseAmount(r.amount) })).filter(r => r.company_id);
+      state.news = (newsCSV || demoNewsRows()).map(r => ({ week: String(r.week || "This week"), headline: String(r.headline || "Business update"), scenario: String(r.scenario || "Review the facts and identify the next legal step."), legal_answer: String(r.legal_answer || "Check the prescribed Act and identify the compliant next step."), sections: String(r.sections || "Corporate law") }));
+      state.deadlines = (deadlinesCSV || DEMO.deadlines).map(r => ({ title: String(r.title || "Filing deadline"), season: Number(r.season || 1), due_datetime: String(r.due_datetime || ""), form_key: String(r.form_key || "registration") })).filter(d => !Number.isNaN(Date.parse(d.due_datetime)));
+      state.roles = {};
+      state.companies.forEach((c, i) => {
+        const source = (companiesCSV && companyRows.find(r => r.company_id === c.company_id)?.roles) || (DEMO.roles[c.company_id] || []);
+        state.roles[c.company_id] = Array.isArray(source) ? source : String(source).split(";").map(x => x.trim()).filter(Boolean);
+        if (!state.roles[c.company_id].length && c.members.length) {
+          const roleNames = ["Managing Director", "Company Secretary", "CFO", "Independent Director", "Legal Counsel", "CSR Head"];
+          state.roles[c.company_id] = c.members.map((m, j) => `${m}:${roleNames[(j + i) % roleNames.length]}`);
+        }
+      });
+      state.demoInUse = Object.values(usedDemo).some(Boolean);
+      state.lastUpdated = new Date();
+      renderAll();
+      maybeCelebrateRankChanges();
+    }
+    function companyWorth(companyId, beforeDays = 0) {
+      const cutoff = beforeDays ? new Date(Date.now() - beforeDays * 86400000).toISOString().slice(0, 10) : null;
+      const total = state.ledger.filter(x => x.company_id === companyId && (!cutoff || !x.date || x.date < cutoff)).reduce((sum, x) => sum + x.amount, CONFIG.STARTING_NET_WORTH);
+      return Math.round(total * 10) / 10;
+    }
+    function worthSummary(company) {
+      const current = companyWorth(company.company_id, 0);
+      const beforeRecent = companyWorth(company.company_id, 7);
+      const delta = Math.round((current - beforeRecent) * 10) / 10;
+      return { current, delta, rank: rankOf(current) };
+    }
+    function renderAll() {
+      renderHero(); renderSeasonMap(); renderLeaderboard(); renderRegistry(); renderNewsTicker(); renderDeadlines(); renderNewsInitial(); updateGameLocks();
+      const demo = state.demoInUse ? '<span class="pill demo">Demo data</span>' : '<span class="pill green">Sheets connected</span>';
+      $('#sourceStatus').innerHTML = `${demo} ${state.demoInUse ? 'Connect published CSV URLs in CONFIG to load your classroom data.' : 'Company, ledger, news, and deadline data loaded from Google Sheets.'}`;
+      $('#lastUpdated').textContent = `Last updated: ${state.lastUpdated ? state.lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'not yet'}`;
+    }
+    function renderHero() {
+      const total = state.companies.reduce((sum, c) => sum + companyWorth(c.company_id), 0);
+      $('#heroCompanyCount').textContent = state.companies.length;
+      $('#heroTotalWorth').textContent = fmtCr(total).replace(" cr", " cr");
+      const season = SEASONS[Math.max(0, Math.min(4, CONFIG.CURRENT_SEASON - 1))];
+      $('#heroSeasonPill').textContent = `Season ${CONFIG.CURRENT_SEASON}: ${season.name}`;
+      $('#leaderboardCount').textContent = `${state.companies.length} companies`;
+    }
+    function renderSeasonMap() {
+      $$('.season-node').forEach(node => {
+        const num = Number(node.dataset.season); node.classList.remove('current', 'done', 'locked');
+        if (num === CONFIG.CURRENT_SEASON) node.classList.add('current');
+        else if (num < CONFIG.CURRENT_SEASON) node.classList.add('done');
+        else node.classList.add('locked');
+        const numText = $('text', node);
+        if (numText) numText.textContent = num < CONFIG.CURRENT_SEASON ? '✓' : String(num);
+      });
+      showSeason(CONFIG.CURRENT_SEASON);
+    }
+    function showSeason(number) {
+      const s = SEASONS[number - 1]; if (!s) return;
+      $('#seasonPanelKicker').textContent = `Season ${number} mission`;
+      $('#seasonPanelTitle').textContent = s.mission;
+      $('#seasonPanelDescription').textContent = s.description;
+      $('#seasonPanelUnit').textContent = s.unit;
+      $('#seasonPanelWeeks').textContent = s.weeks;
+      $('#seasonPanelDeliverables').innerHTML = s.deliverables.map(d => `<li>${escapeHTML(d)}</li>`).join('');
+    }
+    function renderLeaderboard() {
+      const sorted = [...state.companies].map(c => ({ ...c, ...worthSummary(c) })).sort((a, b) => b.current - a.current);
+      if (!sorted.length) { $('#leaderboardGrid').innerHTML = '<div class="empty-state">No company rows found. Check your Companies sheet headings.</div>'; return; }
+      $('#leaderboardGrid').innerHTML = sorted.map((c, i) => {
+        const trendClass = c.delta > 0 ? 'up' : c.delta < 0 ? 'down' : 'flat';
+        const trendIcon = c.delta > 0 ? '↗' : c.delta < 0 ? '↘' : '→';
+        const trendText = `${trendIcon} ${c.delta > 0 ? '+' : ''}${c.delta.toLocaleString('en-IN', { maximumFractionDigits: 1 })}`;
+        return `<article class="company-card card ${i < 3 ? 'top' : ''}" data-tilt><span class="rank-pos">#${String(i + 1).padStart(2, '0')}</span><div class="company-logo">${escapeHTML((c.company_name || 'C').trim().charAt(0).toUpperCase())}</div><h3>${escapeHTML(c.company_name)}</h3><p class="company-type">${escapeHTML(c.company_type)}</p><span class="rank-badge">${escapeHTML(c.rank)}</span><div class="worth-line"><div><div class="tiny-label">Net worth</div><div class="worth">${fmtCr(c.current)}</div></div><div class="trend ${trendClass}" title="Change in the last 7 days">${trendText}</div></div><button class="view-company" type="button" data-open-company="${escapeHTML(c.company_id)}">View company record ↗</button></article>`;
+      }).join('');
+      if (window.VanillaTilt) VanillaTilt.init($$('.company-card[data-tilt]'), { max: 3, speed: 450, glare: false });
+    }
+    function renderRegistry() {
+      const query = ($('#companySearch')?.value || '').trim().toLowerCase();
+      const type = $('#companyTypeFilter')?.value || 'all';
+      const list = state.companies.filter(c => {
+        const haystack = [c.company_name, c.tagline, c.company_type, ...(c.members || [])].join(' ').toLowerCase();
+        return (!query || haystack.includes(query)) && (type === 'all' || c.company_type.toLowerCase() === type.toLowerCase());
+      });
+      $('#registryResultCount').textContent = `Showing ${list.length} of ${state.companies.length} companies`;
+      if (!list.length) { $('#registryGrid').innerHTML = '<div class="empty-state">No match found. Try a different name or company type.</div>'; return; }
+      $('#registryGrid').innerHTML = list.map(c => {
+        const info = worthSummary(c);
+        const roles = (state.roles[c.company_id] || []).slice(0, 3).map(pair => { const bits = String(pair).split(':'); return bits.length > 1 ? bits.slice(1).join(':').trim() : 'Team role'; });
+        return `<button class="registry-card" type="button" data-open-company="${escapeHTML(c.company_id)}"><div class="registry-card-head"><div><h3>${escapeHTML(c.company_name)}</h3><span class="tiny-label">${escapeHTML(c.company_type)}</span></div><span class="monogram">${escapeHTML(c.company_name.charAt(0).toUpperCase())}</span></div><p>${escapeHTML(c.tagline)}</p><div class="registry-role-preview">${roles.map(r => `<span class="role-chip">${escapeHTML(r)}</span>`).join('') || '<span class="role-chip">Roles pending</span>'}</div><p><strong style="color:var(--maroon)">${fmtCr(info.current)}</strong> · ${escapeHTML(info.rank)}</p></button>`;
+      }).join('');
+    }
+    function renderNewsTicker() {
+      if (!state.news.length) return;
+      const bits = state.news.map(n => `<span class="ticker-item"><b>${escapeHTML(n.week || 'NEWS')}</b>${escapeHTML(n.headline)}</span>`).join('');
+      $('#tickerTrack').innerHTML = bits + bits;
+    }
+    function renderNewsInitial() {
+      $('#newsKicker').textContent = 'This week\'s event file';
+      $('#newsHeadline').textContent = 'A surprise arrives at the boardroom.';
+      $('#newsScenario').textContent = 'Draw a card to reveal the business situation and the legal decision your team must make.';
+      $('#newsSections').textContent = 'Corporate law simulation';
+      $('#legalAnswerReveal').classList.remove('show');
+      $('#revealAnswerBtn').disabled = true;
+    }
+    function renderDeadlines() {
+      const list = [...state.deadlines].sort((a, b) => Date.parse(a.due_datetime) - Date.parse(b.due_datetime));
+      if (!list.length) { $('#deadlineGrid').innerHTML = '<div class="empty-state">No deadlines found. Add rows to the Deadlines sheet.</div>'; return; }
+      $('#deadlineGrid').innerHTML = list.map((d, i) => {
+        const date = new Date(d.due_datetime);
+        const overdue = date.getTime() < Date.now();
+        return `<article class="deadline-card card ${overdue ? 'overdue' : ''}" data-deadline="${i}"><div class="registry-card-head"><span class="pill ${overdue ? 'maroon' : ''}">${overdue ? 'Overdue' : `Season ${d.season}`}</span><span class="tiny-label">${overdue ? 'Action needed' : 'Upcoming'}</span></div><h3>${escapeHTML(d.title)}</h3><p class="due-date">Due ${date.toLocaleString([], { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</p><div class="countdown mono" data-countdown="${escapeHTML(d.due_datetime)}">Calculating...</div><button class="btn secondary small open-form" data-form="${escapeHTML(d.form_key)}" type="button">Open related form ↗</button></article>`;
+      }).join('');
+      updateCountdowns();
+    }
+    function updateCountdowns() {
+      $$('[data-countdown]').forEach(el => {
+        const due = Date.parse(el.dataset.countdown); const diff = due - Date.now();
+        const card = el.closest('.deadline-card');
+        if (diff < 0) {
+          if (card) card.classList.add('overdue');
+          const abs = Math.abs(diff); const days = Math.floor(abs / 86400000); const hours = Math.floor((abs % 86400000) / 3600000);
+          el.textContent = `${days}d ${hours}h overdue`;
+        } else {
+          if (card) card.classList.remove('overdue');
+          const days = Math.floor(diff / 86400000); const hours = Math.floor((diff % 86400000) / 3600000); const mins = Math.floor((diff % 3600000) / 60000);
+          el.textContent = `${days}d ${hours}h ${mins}m remaining`;
+        }
+      });
+    }
+    function maybeCelebrateRankChanges() {
+      const newRanks = {};
+      state.companies.forEach(c => newRanks[c.company_id] = rankOrder[rankOf(companyWorth(c.company_id))]);
+      if (Object.keys(state.previousRanks).length && window.confetti) {
+        const promoted = state.companies.filter(c => newRanks[c.company_id] > (state.previousRanks[c.company_id] || 0));
+        if (promoted.length) { window.confetti({ particleCount: 90, spread: 65, origin: { y: 0.65 }, colors: ['#E8B53D', '#6A1B1A', '#FFFBF0'] }); showToast(`${promoted.length} company rank upgrade${promoted.length > 1 ? 's' : ''} detected.`); }
+      }
+      state.previousRanks = newRanks;
+    }
+    function showToast(message) {
+      const el = $('#toast'); el.textContent = message; el.classList.add('show');
+      if (state.toastTimer) clearTimeout(state.toastTimer);
+      state.toastTimer = setTimeout(() => el.classList.remove('show'), 2800);
+    }
+    function openCompanyModal(companyId) {
+      const company = state.companies.find(c => c.company_id === companyId); if (!company) return;
+      const info = worthSummary(company); const roles = state.roles[companyId] || [];
+      $('#modalCompanyName').textContent = company.company_name;
+      $('#modalCompanyTagline').textContent = company.tagline;
+      $('#modalCompanyWorth').textContent = fmtCr(info.current);
+      $('#modalCompanyRank').textContent = info.rank;
+      $('#modalCompanyType').textContent = company.company_type;
+      $('#modalCompanyTrend').textContent = info.delta > 0 ? `+${fmtCr(info.delta)}` : info.delta < 0 ? `−${fmtCr(Math.abs(info.delta))}` : fmtCr(0);
+      $('#modalCompanyMembers').innerHTML = (company.members.length ? company.members : ['Member data not provided']).map(m => `<span class="member-chip">${escapeHTML(m)}</span>`).join('');
+      $('#modalCompanyRoles').innerHTML = roles.length ? roles.map(pair => {
+        const parts = String(pair).split(':'); const name = parts.shift() || 'Team member'; const role = parts.join(':').trim() || 'Role pending';
+        return `<div class="modal-role-row"><span>${escapeHTML(role)}</span><strong>${escapeHTML(name)}</strong></div>`;
+      }).join('') : '<p style="color:var(--muted);font-size:.82rem">No role allocation submitted yet.</p>';
+      $('#companyModalBackdrop').classList.add('open'); $('#closeCompanyModal').focus();
+    }
+    function closeCompanyModal() { $('#companyModalBackdrop').classList.remove('open'); }
+
+    let lastNewsIndex = -1;
+    function drawNews() {
+      if (!state.news.length) return;
+      let idx = Math.floor(Math.random() * state.news.length);
+      if (state.news.length > 1 && idx === lastNewsIndex) idx = (idx + 1) % state.news.length;
+      lastNewsIndex = idx; state.chosenNews = state.news[idx];
+      $('#newsDisplay').animate ? $('#newsDisplay').animate([{ transform: 'rotateY(0deg)', opacity: 1 }, { transform: 'rotateY(78deg)', opacity: .4 }, { transform: 'rotateY(0deg)', opacity: 1 }], { duration: 420, easing: 'ease-in-out' }) : null;
+      $('#newsKicker').textContent = `${state.chosenNews.week || 'Event'} | Event card`;
+      $('#newsHeadline').textContent = state.chosenNews.headline;
+      $('#newsScenario').textContent = state.chosenNews.scenario;
+      $('#newsSections').textContent = state.chosenNews.sections;
+      $('#legalAnswerText').textContent = state.chosenNews.legal_answer;
+      $('#legalAnswerReveal').classList.remove('show'); $('#revealAnswerBtn').disabled = false;
+      state.newsTimerEnd = Date.now() + 15 * 60 * 1000;
+      $('#timerStatus').textContent = 'The response window is running.';
+      if (state.newsTimerInterval) clearInterval(state.newsTimerInterval);
+      updateNewsTimer(); state.newsTimerInterval = setInterval(updateNewsTimer, 1000);
+    }
+    function updateNewsTimer() {
+      if (!state.newsTimerEnd) return;
+      const remaining = Math.max(0, state.newsTimerEnd - Date.now());
+      const mins = Math.floor(remaining / 60000); const secs = Math.floor((remaining % 60000) / 1000);
+      $('#newsTimer').textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+      $('#timerProgress').style.width = `${remaining / (15 * 60 * 1000) * 100}%`;
+      if (remaining <= 0) { $('#timerStatus').textContent = 'Time is up. Ask one team to state its legal next step.'; clearInterval(state.newsTimerInterval); state.newsTimerInterval = null; }
+    }
+    function updateGameLocks() {
+      $$('[data-locked-game]').forEach(btn => { const season = Number(btn.dataset.unlock); btn.disabled = CONFIG.CURRENT_SEASON < season; btn.title = CONFIG.CURRENT_SEASON < season ? `Unlocks in Season ${season}` : 'This game is a placeholder for a later season.'; });
+    }
+    function startCompanyGameClock() {
+      if (!state.companyGameStarted) state.companyGameStarted = Date.now();
+      if (state.companyGameInterval) clearInterval(state.companyGameInterval);
+      state.companyGameInterval = setInterval(() => {
+        const total = Math.floor((Date.now() - state.companyGameStarted) / 1000);
+        $('#companyGameTime').textContent = `${String(Math.floor(total / 60)).padStart(2, '0')}:${String(total % 60).padStart(2, '0')}`;
+      }, 1000);
+    }
+    function renderCompanyScenario() {
+      const idx = state.companyGameIndex; const s = COMPANY_SCENARIOS[idx];
+      if (!s) {
+        $('#companyScenarioNumber').textContent = 'ROUND COMPLETE'; $('#companyScenarioTitle').textContent = 'The Registrar has closed the file.';
+        $('#companyScenarioText').textContent = `Final score: ${state.companyGameScore} points. Your best next move is to explain why each answer fits the statutory definition.`;
+        $('#companyChoices').innerHTML = ''; $('#companyFeedback').classList.remove('show'); $('#companyGameStatus').textContent = 'Completed'; $('#nextCompanyScenario').textContent = 'Play again'; $('#nextCompanyScenario').disabled = false; $('#companyGameProgress').textContent = 'All 12 scenarios completed.';
+        clearInterval(state.companyGameInterval); state.companyGameInterval = null; return;
+      }
+      $('#companyScenarioNumber').textContent = `SCENARIO ${String(idx + 1).padStart(2, '0')} OF ${COMPANY_SCENARIOS.length}`;
+      $('#companyScenarioTitle').textContent = s.title; $('#companyScenarioText').textContent = s.text;
+      $('#companyGameStatus').textContent = state.companyGameAnswered ? 'Answered' : 'Choose a category';
+      $('#companyChoices').innerHTML = COMPANY_CATEGORIES.map(category => `<button class="choice-btn" type="button" data-company-answer="${escapeHTML(category)}">${escapeHTML(category)}</button>`).join('');
+      $('#companyFeedback').classList.remove('show'); $('#companyGameProgress').textContent = 'Correct answer: +10 classroom points. No Sheet entry is created.';
+      $('#nextCompanyScenario').textContent = idx === COMPANY_SCENARIOS.length - 1 ? 'View result' : 'Next scenario →'; $('#nextCompanyScenario').disabled = true;
+      state.companyGameAnswered = false;
+      $('#companyGameScore').textContent = state.companyGameScore; $('#companyGameStreak').textContent = state.companyGameStreak;
+    }
+    function answerCompanyScenario(answer, button) {
+      if (state.companyGameAnswered) return;
+      state.companyGameAnswered = true; startCompanyGameClock();
+      const s = COMPANY_SCENARIOS[state.companyGameIndex]; const correct = answer === s.answer;
+      $$('.choice-btn', $('#companyChoices')).forEach(b => { b.disabled = true; if (b.dataset.companyAnswer === s.answer) b.classList.add('correct'); else if (b === button && !correct) b.classList.add('incorrect'); });
+      if (correct) { state.companyGameScore += 10; state.companyGameStreak += 1; if (window.confetti) window.confetti({ particleCount: 55, spread: 50, origin: { y: .72 }, colors: ['#E8B53D', '#6A1B1A', '#276749'] }); }
+      else state.companyGameStreak = 0;
+      $('#companyGameScore').textContent = state.companyGameScore; $('#companyGameStreak').textContent = state.companyGameStreak; $('#companyGameStatus').textContent = correct ? 'Correct' : 'Review the rule';
+      $('#companyFeedbackTitle').textContent = `${correct ? 'Correct' : 'Not quite'}: ${s.answer}`;
+      $('#companyFeedbackText').textContent = `${s.section}. ${s.reason}`; $('#companyFeedback').classList.add('show'); $('#nextCompanyScenario').disabled = false;
+      $('#companyGameProgress').textContent = correct ? 'Good analysis. Explain the statutory clue to the class.' : 'Read the statutory anchor, then explain which fact should guide your choice.';
+    }
+    function resetCompanyGame() {
+      state.companyGameIndex = 0; state.companyGameScore = 0; state.companyGameStreak = 0; state.companyGameStarted = null; state.companyGameAnswered = false;
+      if (state.companyGameInterval) clearInterval(state.companyGameInterval); state.companyGameInterval = null;
+      $('#companyGameTime').textContent = '00:00'; renderCompanyScenario();
+    }
+    function renderVeilScenario() {
+      const s = VEIL_SCENARIOS[state.veilIndex];
+      if (!s) {
+        $('#veilScenarioNumber').textContent = 'ROUND COMPLETE'; $('#veilScenarioTitle').textContent = 'The veil review is complete.';
+        $('#veilScenarioText').textContent = `Final score: ${state.veilScore} of ${VEIL_SCENARIOS.length * 10}. Discuss which facts made the difference.`;
+        $$('.veil-options button').forEach(b => b.disabled = true); $('#veilResult').classList.remove('show'); $('#nextVeilScenario').textContent = 'Play again'; $('#nextVeilScenario').disabled = false; $('#veilProgressText').textContent = 'All 6 scenarios completed.'; return;
+      }
+      $('#veilScenarioNumber').textContent = `VEIL TEST ${String(state.veilIndex + 1).padStart(2, '0')} OF ${VEIL_SCENARIOS.length}`;
+      $('#veilScenarioTitle').textContent = s.title; $('#veilScenarioText').textContent = s.text;
+      $('#veilGameProgress').textContent = `${state.veilIndex + 1} / ${VEIL_SCENARIOS.length}`;
+      $('#veilResult').classList.remove('show'); $('#nextVeilScenario').disabled = true; $('#nextVeilScenario').textContent = state.veilIndex === VEIL_SCENARIOS.length - 1 ? 'View result' : 'Next scenario →';
+      $$('.veil-options button').forEach(b => b.disabled = false); state.veilAnswered = false;
+    }
+    function answerVeil(answer) {
+      if (state.veilAnswered) return; state.veilAnswered = true;
+      const s = VEIL_SCENARIOS[state.veilIndex]; const correct = answer === s.answer;
+      if (correct) { state.veilScore += 10; if (window.confetti) window.confetti({ particleCount: 45, spread: 45, origin: { y: .75 }, colors: ['#E8B53D', '#6A1B1A'] }); }
+      $('#veilGameScore').textContent = state.veilScore;
+      $('#veilResultTitle').textContent = `${correct ? 'Sound judgment' : 'Revisit the facts'}: ${s.answer === 'lift' ? 'Lift the veil' : 'Respect the veil'}`;
+      $('#veilResultText').textContent = s.result; $('#veilResultAnchor').textContent = s.anchor; $('#veilResult').classList.add('show');
+      $('#veilProgressText').textContent = correct ? 'Correct call. Explain why the facts justify that conclusion.' : 'The anchor explains the better answer. Identify the fact that changes the legal analysis.';
+      $$('.veil-options button').forEach(b => b.disabled = true); $('#nextVeilScenario').disabled = false;
+    }
+    function resetVeilGame() { state.veilIndex = 0; state.veilScore = 0; state.veilAnswered = false; $('#veilGameScore').textContent = '0'; renderVeilScenario(); $$('.veil-options button').forEach(b => b.disabled = false); }
+
+    document.addEventListener('click', event => {
+      const openBtn = event.target.closest('[data-open-company]');
+      if (openBtn) openCompanyModal(openBtn.dataset.openCompany);
+      const seasonNode = event.target.closest('.season-node');
+      if (seasonNode) showSeason(Number(seasonNode.dataset.season));
+      const formBtn = event.target.closest('.open-form');
+      if (formBtn) {
+        const key = formBtn.dataset.form; const url = CONFIG.FORM_URLS[key];
+        if (url && /^https:\/\//i.test(url)) window.open(url, '_blank', 'noopener,noreferrer');
+        else showToast(`Add the ${key} Google Form URL in CONFIG before using this filing button.`);
+      }
+      const companyAnswer = event.target.closest('[data-company-answer]');
+      if (companyAnswer) answerCompanyScenario(companyAnswer.dataset.companyAnswer, companyAnswer);
+      const veilChoice = event.target.closest('[data-veil-choice]');
+      if (veilChoice) answerVeil(veilChoice.dataset.veilChoice);
+      const tab = event.target.closest('[data-game]');
+      if (tab) {
+        $$('.game-tab[data-game]').forEach(b => { const active = b === tab; b.classList.toggle('active', active); b.setAttribute('aria-selected', String(active)); });
+        $$('.game-panel').forEach(panel => panel.classList.toggle('active', panel.id === `game-${tab.dataset.game}`));
+      }
+      const locked = event.target.closest('[data-locked-game]');
+      if (locked) showToast(`${locked.dataset.lockedGame} is a later-season placeholder. It unlocks in Season ${locked.dataset.unlock}.`);
+    });
+    $$('.season-node').forEach(node => node.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); showSeason(Number(node.dataset.season)); } }));
+    $('#companySearch').addEventListener('input', renderRegistry);
+    $('#companyTypeFilter').addEventListener('change', renderRegistry);
+    $('#drawNewsBtn').addEventListener('click', drawNews);
+    $('#revealAnswerBtn').addEventListener('click', () => { if (!state.chosenNews) return; $('#legalAnswerReveal').classList.add('show'); $('#revealAnswerBtn').disabled = true; });
+    $('#nextCompanyScenario').addEventListener('click', () => { if (!state.companyGameAnswered) { if (state.companyGameIndex >= COMPANY_SCENARIOS.length) { resetCompanyGame(); showToast('New round started.'); } return; } state.companyGameIndex++; if (state.companyGameIndex > COMPANY_SCENARIOS.length) { resetCompanyGame(); showToast('New round started.'); return; } renderCompanyScenario(); });
+    $('#nextVeilScenario').addEventListener('click', () => { if (!state.veilAnswered) { if (state.veilIndex >= VEIL_SCENARIOS.length) { resetVeilGame(); showToast('New veil review started.'); } return; } state.veilIndex++; if (state.veilIndex > VEIL_SCENARIOS.length) { resetVeilGame(); showToast('New veil review started.'); return; } renderVeilScenario(); });
+    $$('.flip-card').forEach(card => {
+      const flip = () => card.classList.toggle('flipped');
+      card.addEventListener('click', flip);
+      card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flip(); } });
+    });
+    $('#closeCompanyModal').addEventListener('click', closeCompanyModal);
+    $('#companyModalBackdrop').addEventListener('click', e => { if (e.target === $('#companyModalBackdrop')) closeCompanyModal(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeCompanyModal(); });
+    $('#refreshDataBtn').addEventListener('click', async () => { $('#refreshDataBtn').disabled = true; $('#refreshDataBtn').textContent = '↻ Loading...'; await loadAllData(); $('#refreshDataBtn').disabled = false; $('#refreshDataBtn').textContent = '↻ Refresh Sheets'; showToast(state.demoInUse ? 'Loaded available data. Demo fallback is still in use for one or more sheets.' : 'All four Google Sheets tabs loaded.'); });
+    $('#backToTop').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+    // Reveal sections as they enter view. The page remains usable when the animation library is unavailable.
+    function setupRevealAnimations() {
+      if (window.gsap && window.ScrollTrigger) {
+        gsap.registerPlugin(ScrollTrigger);
+        gsap.utils.toArray('.section').forEach(section => gsap.from(section.querySelector('.section-head'), { opacity: 0, y: 16, duration: .55, ease: 'power2.out', scrollTrigger: { trigger: section, start: 'top 88%', once: true } }));
+      }
+    }
+    // iOS iframe scroll helper. It only takes over vertical touch movement on iOS devices.
+    (function setupIFrameTouchScroll() {
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      if (!isIOS) return;
+      let lastY = null;
+      document.addEventListener('touchstart', e => { if (e.touches.length === 1) lastY = e.touches[0].clientY; }, { passive: true });
+      document.addEventListener('touchmove', e => {
+        if (lastY === null || e.touches.length !== 1) return;
+        const y = e.touches[0].clientY; const delta = lastY - y; lastY = y;
+        if (Math.abs(delta) > 0) { window.scrollBy(0, delta); if (e.cancelable) e.preventDefault(); }
+      }, { passive: false });
+      document.addEventListener('touchend', () => { lastY = null; }, { passive: true });
+    })();
+    window.addEventListener('load', () => {
+      setupRevealAnimations();
+      if (window.VanillaTilt) VanillaTilt.init($$('.company-card[data-tilt]'), { max: 3, speed: 450, glare: false });
+    });
+    if (window.gsap && window.ScrollTrigger) setupRevealAnimations();
+
+    renderCompanyScenario(); renderVeilScenario();
+    loadAllData();
+    setInterval(updateCountdowns, 60000);
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.8.1/dist/vanilla-tilt.min.js" defer></script>
+</body>
+</html>
